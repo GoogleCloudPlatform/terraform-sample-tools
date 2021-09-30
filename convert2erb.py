@@ -1,3 +1,26 @@
+#! /usr/local/bin/python3
+"""
+Magic Modules Terraform Scripts testing(helper) tool!
+
+Job of this script to convert .tf into .erb & .yaml file.
+
+## How to use this script?
+
+1. Download this script. Make this scrpt executeable & `pip3 install termcolor`
+2. run shell command `./convert2erb.py <....tf file>`
+3. Output .tf file is generated from the location where script is executed!
+4. Output .tf file will have same name as .erb file (for test.tf.erb, output file is test.tf)
+
+Example:
+```
+# Download this script to required location
+# run - `chmod +x convert2erb.py`
+# run - `pip3 install termcolor`. We use pkg this for erros highlighting in terminal!
+
+# example - generating .erb * .yaml
+bash$ ./convert2erb.py ../mmv1/templates/terraform/examples/external_http_lb_mig_backend_custom_header.tf.erb ../mmv1/products/compute/terraform.yaml
+```
+"""
 import os
 import sys
 import re

@@ -1,9 +1,16 @@
-# Hello World, Python
+# Magic Modules Terraform Tools
 
-A template repository for a sample Cloud Run service, written in Python
+Magic Modules Terraform testing(helper) tools! Please check the details with in the scripts!
 
- * `app.py` sourced from the [knative sample documentation](https://github.com/knative/docs/blob/master/docs/serving/samples/hello-world/helloworld-python/app.py)
- * `Dockerfile` sourced from the [knative sample documentation](https://github.com/knative/docs/blob/master/docs/serving/samples/hello-world/helloworld-python/Dockerfile)
+## Tool: Convert2tf
+
+To convert Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`) file.
+
+## Tool: Convert2erb
+
+To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
+
+__Note:__ Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
 
 ## Contributions
 
