@@ -34,13 +34,14 @@ from termcolor import colored
 
 
 def show_warning(text):
-    print(colored(color='red', text=str(text + '\n')))
+    print(colored(color="red", text=str(text + "\n")))
+
 
 def find_tf_section(vars_file, section_name):
     "To find the yaml related to section_name"
     flag = False
     kv_lines = []
-    section_header = '!ruby/object:Provider::Terraform::Examples'
+    section_header = "!ruby/object:Provider::Terraform::Examples"
     for line in open(vars_file):
         if section_header in line:
             flag = False
@@ -49,6 +50,7 @@ def find_tf_section(vars_file, section_name):
         if section_name in line:
             flag = True
     return kv_lines
+
 
 def get_key_value_pairs(kv_lines):
     regex = r"^\s*(\w+):\s*\"([\w,-]+)\"$"
@@ -59,7 +61,7 @@ def get_key_value_pairs(kv_lines):
             if len(pair) != 2:
                 continue
             key, value = pair
-            if key == 'primary_resource_id':
+            if key == "primary_resource_id":
                 key = "<%= ctx[:primary_resource_id] %>"
             else:
                 key = "<%= ctx[:vars]['{0}'] %>".format(key)
@@ -69,18 +71,20 @@ def get_key_value_pairs(kv_lines):
 
 def main(tf_file_name, vars_file):
     tf_file = open(tf_file_name).read().strip()
-    section_name = os.path.basename(tf_file_name).split('.')[0]
+    section_name = os.path.basename(tf_file_name).split(".")[0]
     vars_dict = get_key_value_pairs(find_tf_section(vars_file, section_name))
     # Vars usage validation
-    print('##### Vars Validations')
+    print("##### Vars Validations")
     for k, v in vars_dict.items():
         ct = tf_file.count(k)
-        prefix = 'Found `{0}` '.format(k)
-        suffix = '{0} times'.format(ct)
-        line = ' ' * (80 - len(prefix) - len(suffix))
+        prefix = "Found `{0}` ".format(k)
+        suffix = "{0} times".format(ct)
+        line = " " * (80 - len(prefix) - len(suffix))
         print(prefix + line + suffix)
         if ct == 0:
-            show_warning(' - Warning! Found no usage for this defined var in .yaml file')
+            show_warning(
+                " - Warning! Found no usage for this defined var in .yaml file"
+            )
         else:
             # if 'mig_name' in k:
             #     continue
@@ -88,38 +92,37 @@ def main(tf_file_name, vars_file):
     # Check for any un-defined var
     missing_var_defs = []
     for line in tf_file.splitlines():
-        if '<%= ctx[:vars][' in line:
+        if "<%= ctx[:vars][" in line:
             missing_var_defs.append(line)
     if missing_var_defs:
-        show_warning('\n - Warning! Found no var defined for following lines in .erb file')
-        show_warning('\n'.join(missing_var_defs))
+        show_warning(
+            "\n - Warning! Found no var defined for following lines in .erb file"
+        )
+        show_warning("\n".join(missing_var_defs))
     # write TF
-    out_file = '{0}.tf'.format(section_name)
-    with open(out_file, 'w') as fp:
+    out_file = "{0}.tf".format(section_name)
+    with open(out_file, "w") as fp:
         fp.write(tf_file)
-        print('\nOutputFile: {0}'.format(out_file))
+        print("\nOutputFile: {0}".format(out_file))
 
 
 def parse_user_args(args):
     tf_file_name = None
     vars_file = None
     for each in args:
-        if each.endswith('.tf.erb'):
+        if each.endswith(".tf.erb"):
             tf_file_name = each
-        elif each.endswith('.yaml'):
+        elif each.endswith(".yaml"):
             vars_file = each
     if not tf_file_name:
-        show_warning('\nExpected `.tf.erb` file as the first input arg')
-        raise Exception('Missing command line input')
+        show_warning("\nExpected `.tf.erb` file as the first input arg")
+        raise Exception("Missing command line input")
     if not vars_file:
-        show_warning('\nExpected `.yaml` file as the second input arg')
-        raise Exception('Missing command line input')
+        show_warning("\nExpected `.yaml` file as the second input arg")
+        raise Exception("Missing command line input")
     main(tf_file_name, vars_file)
 
 
-if __name__ == '__main__':
-    print('Args:', sys.argv)
+if __name__ == "__main__":
+    print("Args:", sys.argv)
     parse_user_args(sys.argv)
-
-
-
