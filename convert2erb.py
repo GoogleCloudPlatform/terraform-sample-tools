@@ -150,7 +150,7 @@ def generate_erb_file(filename, resource_id):
     return out_fname
 
 
-def generate_teraform_yaml(resource_id):
+def generate_teraform_yaml(filename, resource_id):
     data = []
     data.append(
         template_header.format(
@@ -199,7 +199,7 @@ def main(filename):
         # create .tf.erb
         print(" - {}".format(generate_erb_file(filename, resource_id)))
         # create .yaml file
-        print(" - {}".format(generate_teraform_yaml(resource_id)))
+        print(" - {}".format(generate_teraform_yaml(filename, resource_id)))
     print("\n")
 
 def parse_user_args(args):
