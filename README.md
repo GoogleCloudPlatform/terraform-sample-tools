@@ -2,6 +2,12 @@
 
 Magic Modules Terraform testing(helper) tools! Please check the details with in the scripts!
 
+## Tool: Tftools
+
+`tftools` is a command line tool, which is internally acts as a wrapper over the following tools.
+
+> For all simple single purpose tasks one can download only the required convert* scripts and check documentation within. It is not required to install this entire package!
+
 ## Tool: Convert2tf
 
 To convert Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`) file.
@@ -10,14 +16,14 @@ To convert Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`)
 
 To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
 
-__Note:__ Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
+__Note:__ 
+1. Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
+2. For some safety concerns files generated will have a suffic `_check`.
 
 # How to use?
 
-For all simple single purpose tasks one can download the required convert* scripts and check documentation within. There is not need to install this entire package!
 
 ## Installation
-
 
 Downloading files
 
@@ -30,8 +36,8 @@ cd MagicModules-TerraformTools/
 Install now
 
 ```bash
-# We are developing command inf branch -  command_line_tool
-#   if you dont notice setup.py in report plese do `git checkout command_line_tool`
+# We are developing command in a branch named `command_line_tool`
+#   if you don't see setup.py in master branch, please do `git checkout command_line_tool`
 python setup.py install
 ```
 
