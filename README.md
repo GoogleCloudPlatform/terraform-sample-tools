@@ -39,17 +39,15 @@ Install now
 python setup.py install
 ```
 
-Checking your install
-
-```bash
-pip3 list | grep tftools
-```
 
 __Installation Check__
 
-To check if tftools installed properly, run following command
+To check if tftools installed properly, run following commands
+
 
 ```bash
+pip3 list | grep tftools
+
 which tfools
 ```
 
@@ -60,7 +58,6 @@ alias python=python3
 alias pip=pip3
 alias tf=terraform
 
-# Below line if for MacOS users, p
 export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin/":$PATH
 ```
 
