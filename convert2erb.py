@@ -202,9 +202,7 @@ def main(filename):
         print(" - {}".format(generate_teraform_yaml(resource_id)))
     print("\n")
 
-
-if __name__ == "__main__":
-    print("Args:", sys.argv)
+def parse_user_args(args):
     filename = ""
     for each in sys.argv:
         if each.endswith(".tf"):
@@ -212,3 +210,7 @@ if __name__ == "__main__":
     if not (os.path.isfile(filename) and filename.endswith(".tf")):
         raise Exception("FileInputError: Expected .tf as input")
     main(filename)
+
+if __name__ == "__main__":
+    print("Args:", sys.argv)
+    parse_user_args(sys.argv)

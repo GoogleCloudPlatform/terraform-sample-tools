@@ -100,11 +100,10 @@ def main(tf_file_name, vars_file):
         print('\nOutputFile: {0}'.format(out_file))
 
 
-if __name__ == '__main__':
-    print('Args:', sys.argv)
+def parse_user_args(args):
     tf_file_name = None
     vars_file = None
-    for each in sys.argv:
+    for each in args:
         if each.endswith('.tf.erb'):
             tf_file_name = each
         elif each.endswith('.yaml'):
@@ -116,5 +115,11 @@ if __name__ == '__main__':
         show_warning('\nExpected `.yaml` file as the second input arg')
         raise Exception('Missing command line input')
     main(tf_file_name, vars_file)
+
+
+if __name__ == '__main__':
+    print('Args:', sys.argv)
+    parse_user_args(sys.argv)
+
 
 
