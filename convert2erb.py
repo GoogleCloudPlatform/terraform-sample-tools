@@ -18,7 +18,7 @@ Example:
 # run - `pip3 install termcolor`. We use pkg this for erros highlighting in terminal!
 
 # example - generating .erb * .yaml
-bash$ ./convert2erb.py ../mmv1/templates/terraform/examples/external_http_lb_mig_backend_custom_header.tf ../mmv1/products/compute/terraform.yaml
+bash$ ./convert2erb.py external_http_lb_mig_backend_custom_header.tf
 ```
 """
 import os
@@ -143,7 +143,7 @@ def generate_erb_file(filename, resource_id):
         resource_lines[resource_id],
         get_primary_resource_line(resource_types[resource_id]),
     )
-    out_fname = os.path.basename(filename).split(".")[0] + ".erb_check"
+    out_fname = os.path.basename(filename).split(".")[0] + ".tf.erb_check"
     with open(out_fname, "w") as fp:
         fp.write(erb_template)
         # print("Written to {0}".format(out_fname))
@@ -170,6 +170,9 @@ def generate_teraform_yaml(resource_id):
 def main(filename):
     # parse file to collect resources details
     parse_file(filename)
+    if not len(resource_types) == len(resource_tfnames) == len(resource_names):
+        cprint("\nNoticed unexpected pattern! Plese check parsing logic!\n", 'red')
+        raise Exception('Error: Failed to Parse file for details!')
     # show terraform resources summary
     cprint("\nTerraform Resources Summary", "blue", attrs=["bold"])
     print("--" * 55)
@@ -193,7 +196,9 @@ def main(filename):
 
     if prepare_files and input("\nEnter `yes` to proceed: ") == "yes":
         cprint("Created files", "blue")
+        # create .tf.erb
         print(" - {}".format(generate_erb_file(filename, resource_id)))
+        # create .yaml file
         print(" - {}".format(generate_teraform_yaml(resource_id)))
     print("\n")
 

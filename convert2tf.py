@@ -4,6 +4,7 @@ Magic Modules Terraform Scripts testing(helper) tool!
 
 Job of this script to convert .erb files to .tf files using values defined in .yaml files
 
+__Note:__ Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section.
 
 ## How to use this script?
 
@@ -101,13 +102,18 @@ def main(tf_file_name, vars_file):
 
 if __name__ == '__main__':
     print('Args:', sys.argv)
-    tf_file_name = sys.argv[1]
-    if not tf_file_name.endswith('.tf.erb'):
-        show_warning('Expected .tf.erb file as the first arg')
+    tf_file_name = None
+    vars_file = None
+    for each in sys.argv:
+        if each.endswith('.tf.erb'):
+            tf_file_name = each
+        elif each.endswith('.yaml'):
+            vars_file = each
+    if not tf_file_name:
+        show_warning('\nExpected `.tf.erb` file as the first input arg')
         raise Exception('Missing command line input')
-    vars_file = sys.argv[2]
-    if not vars_file.endswith('.yaml'):
-        show_warning('Expected .yaml file as the second arg')
+    if not vars_file:
+        show_warning('\nExpected `.yaml` file as the second input arg')
         raise Exception('Missing command line input')
     main(tf_file_name, vars_file)
 
