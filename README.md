@@ -55,6 +55,18 @@ pip3 list | grep tftools
 which tfools
 ```
 
+In MacOS - At times even after installation `tftools` might not be available in you in command line. This could be due to `PATH` issue. Recommendation is check & add following to you `~/.bash_profile` file.
+
+```
+alias python=python3
+alias pip=pip3
+alias tf=terraform
+
+# Below line if for MacOS users, p
+export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin/":$PATH
+```
+
+
 ## Usage
 
 `tftools` is small wrapper over `convert2erb` and `convert2tf` tools.
