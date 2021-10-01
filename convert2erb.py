@@ -171,8 +171,8 @@ def main(filename):
     # parse file to collect resources details
     parse_file(filename)
     if not len(resource_types) == len(resource_tfnames) == len(resource_names):
-        cprint("\nNoticed unexpected pattern! Plese check parsing logic!\n", 'red')
-        raise Exception('Error: Failed to Parse file for details!')
+        cprint("\nNoticed unexpected pattern! Plese check parsing logic!\n", "red")
+        raise Exception("Error: Failed to Parse file for details!")
     # show terraform resources summary
     cprint("\nTerraform Resources Summary", "blue", attrs=["bold"])
     print("--" * 55)
@@ -190,6 +190,11 @@ def main(filename):
     prepare_files = False
     if 0 <= resource_id < len(resource_types):
         prepare_files = True
+        rtype, tfname, rname = (
+            resource_types[resource_id],
+            resource_tfnames[resource_id],
+            resource_names[resource_id],
+        )
         print("\nResourceType\t: " + rtype)
         print("TFLocalName\t: " + tfname)
         print("ResourceName\t: " + rname)
@@ -202,6 +207,7 @@ def main(filename):
         print(" - {}".format(generate_teraform_yaml(filename, resource_id)))
     print("\n")
 
+
 def parse_user_args(args):
     filename = ""
     for each in sys.argv:
@@ -210,6 +216,7 @@ def parse_user_args(args):
     if not (os.path.isfile(filename) and filename.endswith(".tf")):
         raise Exception("FileInputError: Expected .tf as input")
     main(filename)
+
 
 if __name__ == "__main__":
     print("Args:", sys.argv)
