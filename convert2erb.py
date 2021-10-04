@@ -7,7 +7,7 @@ Job of this script to convert .tf into .erb & .yaml file.
 ## How to use this script?
 
 1. Download this script.
-2. Make this scrpt executeable: `chmod +x convert2erb.py`.
+2. Make this script executeable: `chmod +x convert2erb.py`.
 3. Run `pip3 install termcolor`.
 4. Run the script: `./convert2erb.py <filename>.tf`
 5. Output .erb file is generated from the location where script is executed!
