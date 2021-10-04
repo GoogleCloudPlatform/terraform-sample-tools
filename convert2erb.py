@@ -6,10 +6,15 @@ Job of this script to convert .tf into .erb & .yaml file.
 
 ## How to use this script?
 
-1. Download this script. Make this scrpt executeable & `pip3 install termcolor`
-2. run shell command `./convert2erb.py <....tf file>`
-3. Output .erb file is generated from the location where script is executed!
-4. Output .erb file will have same name as .tf file (for test.tf, output file is test.tf.erb)
+1. Download this script.
+2. Make this scrpt executeable: `chmod +x convert2erb.py`.
+3. Run `pip3 install termcolor`.
+4. Run the script: `./convert2erb.py <filename>.tf`
+5. Output .erb file is generated from the location where script is executed!
+6. Output .erb file will have same name as .tf file (for test.tf, output file is test.tf.erb)
+7. Output terraform.yaml_check file contains content that you can add to your
+   product's terraform.yaml file.
+
 
 Example:
 ```
