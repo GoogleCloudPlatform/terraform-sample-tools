@@ -6,24 +6,37 @@ Job of this script to convert .tf into .erb & .yaml file.
 
 ## How to use this script?
 
-1. Download this script.
+1. Download this script. 
 2. Make this script executeable: `chmod +x convert2erb.py`.
 3. Run `pip3 install termcolor`.
 4. Run the script: `./convert2erb.py <filename>.tf`
-5. Output .erb file is generated from the location where script is executed!
-6. Output .erb file will have same name as .tf file (for test.tf, output file is test.tf.erb)
-7. Output terraform.yaml_check file contains content that you can add to your
-   product's terraform.yaml file.
+
+   When prompted, select a resource to be the primary one.
+
+   Note: In the Hashicorp Google provider reference documentation, the
+   primary resource is the one that gets updated to include your
+   new example.
+
+## Output files
+
+The following output files are generated from the location where script is
+executed:
+
+*  An .erb file. You can add this file to Magic Modules in mmv1/templates/terraform/examples.
+   The output .erb file will have same name as the .tf file
+   (for test.tf, output file is test.tf.erb).
+*  A terraform.yaml_check file is contains content that you can add to Magic Modules in
+   mmv1/products/<your_product>/terraform.yaml.
 
 
 Example:
 ```
 # Download this script to required location
 # run - `chmod +x convert2erb.py`
-# run - `pip3 install termcolor`. We use pkg this for erros highlighting in terminal!
+# run - `pip3 install termcolor`. We use pkg this for error highlighting in terminal!
 
 # example - generating .erb * .yaml
-bash$ ./convert2erb.py external_http_lb_mig_backend_custom_header.tf
+bash$ ./convert2erb.py my_terraform_snippet.tf
 ```
 """
 import os
@@ -189,7 +202,7 @@ def main(filename):
     print("--" * 55)
     #
     resource_id = input(
-        "\nFrom above a table please check and provide Primary Resource row ID: "
+        "\nFor the Primary Resource, enter a row ID number: "
     )
     resource_id = int(resource_id) - 1
     prepare_files = False
