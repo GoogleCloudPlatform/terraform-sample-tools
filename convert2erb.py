@@ -22,10 +22,10 @@ Job of this script to convert .tf into .erb & .yaml file.
 The following output files are generated from the location where script is
 executed:
 
-*  An .erb file. You can add this file to Magic Modules in mmv1/templates/terraform/examples.
+*  An .erb file that ou can add to Magic Modules in mmv1/templates/terraform/examples.
    The output .erb file will have same name as the .tf file
    (for test.tf, output file is test.tf.erb).
-*  A terraform.yaml_check file is contains content that you can add to Magic Modules in
+*  A terraform.yaml_check file contains content that you can add to Magic Modules in
    mmv1/products/<your_product>/terraform.yaml.
 
 
