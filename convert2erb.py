@@ -72,7 +72,7 @@ def timer_func(func):
         logging.debug(line.format(func.__name__))
         result = func(*args, **kwargs)
         t2 = time()
-        print(f"Function {func.__name__!r} executed in {(t2-t1):.4f}s")
+        logging.info(f"Function {func.__name__!r} executed in {(t2-t1):.4f}s")
         line = "---------------------[ending - {}]---------------------"
         return result
 
@@ -215,7 +215,7 @@ def _generate_erb_file_primary_resource_replacement(erb_template, resource_id):
     return erb_template
 
 
-def generate_erb_file(filename, resource_id):
+def _generate_erb_file(filename, resource_id):
     erb_template = open(filename).read()
     # convert vars with vars template
     for k in resource_names:
@@ -234,7 +234,7 @@ def generate_erb_file(filename, resource_id):
     return out_fname
 
 
-def generate_teraform_yaml(filename, resource_id):
+def _generate_teraform_yaml(filename, resource_id):
     data = []
     data.append(
         template_header.format(
@@ -251,6 +251,15 @@ def generate_teraform_yaml(filename, resource_id):
     return out_fname
 
 
+@timer_func
+def generate_erb_yaml_files(filename, pm_resource_id):
+    cprint("Created files", "cyan")
+    # create .tf.erb
+    print(" - {}".format(_generate_erb_file(filename, pm_resource_id)))
+    # create .yaml file
+    print(" - {}".format(_generate_teraform_yaml(filename, pm_resource_id)))
+
+
 def main(filename):
     # parse file to collect resources details
     tf_resource_parser(filename)
@@ -258,30 +267,25 @@ def main(filename):
     # show terraform resources summary
     show_tf_resources_table()
 
-    # user input
-    resource_id = input(
+    # user input - primary resource id
+    pm_resource_id = input(
         "\nFrom above a table please check and provide Primary Resource row ID: "
     )
-    resource_id = int(resource_id) - 1
+    pm_resource_id = int(pm_resource_id) - 1
     is_valid_user_input = False
-    if 0 <= resource_id < len(resource_types):
+    if 0 <= pm_resource_id < len(resource_types):
         is_valid_user_input = True
         rtype, tfname, rname = (
-            resource_types[resource_id],
-            resource_tfnames[resource_id],
-            resource_names[resource_id],
+            resource_types[pm_resource_id],
+            resource_tfnames[pm_resource_id],
+            resource_names[pm_resource_id],
         )
         print("\nResourceType\t: " + rtype)
         print("TFLocalName\t: " + tfname)
         print("ResourceName\t: " + rname)
 
     if is_valid_user_input and input("\nEnter `yes` to proceed: ") == "yes":
-        cprint("Created files", "blue")
-        # create .tf.erb
-        print(" - {}".format(generate_erb_file(filename, resource_id)))
-        # create .yaml file
-        print(" - {}".format(generate_teraform_yaml(filename, resource_id)))
-    print("\n")
+        generate_erb_yaml_files(filename, pm_resource_id)
 
 
 def parse_user_args(args):
