@@ -12,7 +12,7 @@ import convert2tf
 def main():
     cprint(
         "\n================================ [tftools] ================================\n",
-        "blue",
+        "blue", attrs=["bold"]
     )
     if ".erb.tf" in " ".join(sys.argv):
         convert2tf.parse_user_args(sys.argv)
@@ -26,7 +26,7 @@ def main():
         )
     cprint(
         "\n================================ [tftools] ================================\n",
-        "blue",
+        "blue", attrs=["bold"]
     )
 
 
