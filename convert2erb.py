@@ -19,6 +19,10 @@ Example:
 
 # example - generating .erb * .yaml
 bash$ ./convert2erb.py external_http_lb_mig_backend_custom_header.tf
+
+Limitation:
+    - It is expected all the `tf resources` have a `name` associated with them
+    - It is expected all the tf resource attribute `name` is the first attribute defined
 ```
 """
 import os
@@ -161,7 +165,7 @@ def tf_resource_parser(filename):
 
 
 def show_tf_resources_table():
-    cprint("\nTerraform Resources Summary", "blue", attrs=["bold"])
+    cprint("Terraform Resources Summary", "blue", attrs=["bold"])
     print("--" * 55)
     print(
         " ID\t" + to_table3c_row_format("ResourceType", "TFLocalName", "ResourceName")
@@ -253,7 +257,7 @@ def _generate_teraform_yaml(filename, resource_id):
 
 @timer_func
 def generate_erb_yaml_files(filename, pm_resource_id):
-    cprint("Created files", "cyan")
+    cprint("\n(Re)Created Files", "blue", attrs=["bold"])
     # create .tf.erb
     print(" - {}".format(_generate_erb_file(filename, pm_resource_id)))
     # create .yaml file
