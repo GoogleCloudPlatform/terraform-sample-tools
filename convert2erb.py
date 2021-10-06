@@ -25,8 +25,13 @@ import os
 import sys
 import re
 import logging
+from time import time
 from termcolor import colored, cprint
 
+
+# logging settings
+logging.basicConfig()
+# logging.getLogger().setLevel(logging.DEBUG)
 
 tf_lines = []
 resource_lines = []
@@ -58,7 +63,23 @@ template_footer = """
 )
 
 
-def get_resource_names(text):
+def timer_func(func):
+    # This function shows the execution time of
+    # the function object passed
+    def wrap_func(*args, **kwargs):
+        t1 = time()
+        line = "---------------------[starting - {}]---------------------"
+        logging.debug(line.format(func.__name__))
+        result = func(*args, **kwargs)
+        t2 = time()
+        print(f"Function {func.__name__!r} executed in {(t2-t1):.4f}s")
+        line = "---------------------[ending - {}]---------------------"
+        return result
+
+    return wrap_func
+
+
+def get_resource_name(text):
     try:
         name = re.findall(resource_name_regex_pattern, text)[0]
     except Exception as err:
@@ -67,12 +88,12 @@ def get_resource_names(text):
                 "\n\tError: Failed to find name for the following line", color="red"
             )
         )
-        print("\t\t[" + text + "]")
+        print("\t\t--->[" + text + "]<---")
         raise Exception("Parsing Error!")
     return name
 
 
-def collect_resource_details(text):
+def get_resource_rtype_and_tfname(text):
     try:
         rtype, tfname = re.findall(resource_regex_pattern, text)[0]
     except Exception as err:
@@ -81,39 +102,40 @@ def collect_resource_details(text):
                 "\n\tError: Failed to find name for the following line", color="red"
             )
         )
-        print("\t\t[" + text + "]")
+        print("\t\t--->[" + text + "]<---")
         raise Exception(err)
     return rtype, tfname
 
 
-def ppline(word1, word2, word3):
+def to_table3c_row_format(word1, word2, word3):
+    # Return a row with 3 columns structure
     line = " " * 15 + word2.center(80, " ")
     line = word1 + line[len(word1) : 100 - len(word3)] + word3
     return line
 
 
-def clean_up_var_name(name):
+def cleanup_tfvar_name(name):
     return name.replace("-", "_")
 
 
-def get_var_name(name):
-    return "<%= ctx[:vars]['{}'] %>".format(clean_up_var_name(name))
+def get_template_tfvar_name(name):
+    return "<%= ctx[:vars]['{}'] %>".format(cleanup_tfvar_name(name))
 
 
-def get_primary_resource_line(resource_type):
+def get_template_primary_resource_line(resource_type):
     return 'resource "' + resource_type + '" "<%= ctx[:primary_resource_id] %>" {'
 
 
-def parse_file(filename):
+@timer_func
+def tf_resource_parser(filename):
     tf_lines = list(open(filename))
     flag = False
     flag2 = False
-    # print('File Parsing,...')
+    # logging.debug('File Parsing,...')
     for line in tf_lines:
         line = line.strip()
         # identify resource tf line
         if line.startswith("resource "):
-            # print('---' * 25)
             resource_lines.append(line)
             flag = True
             # print('\t' + line)
@@ -126,23 +148,85 @@ def parse_file(filename):
         # update records
         if flag2:
             flag2 = False
-            rtype, tfname = collect_resource_details(resource_lines[-1])
-            rname = get_resource_names(resource_name_lines[-1])
+            rtype, tfname = get_resource_rtype_and_tfname(resource_lines[-1])
+            rname = get_resource_name(resource_name_lines[-1])
             resource_types.append(rtype)
             resource_tfnames.append(tfname)
             resource_names.append(rname)
-    # print('----' * 25)
-    # print("parsing is compelted !!")
+    # logging.debug("parsing is compelted !!")
+
+    if not len(resource_types) == len(resource_tfnames) == len(resource_names):
+        cprint("\nNoticed unexpected pattern! Please check the parsing logic!\n", "red")
+        raise Exception("Error: Failed to Parse file for details!")
+
+
+def show_tf_resources_table():
+    cprint("\nTerraform Resources Summary", "blue", attrs=["bold"])
+    print("--" * 55)
+    print(
+        " ID\t" + to_table3c_row_format("ResourceType", "TFLocalName", "ResourceName")
+    )
+    for i, (rtype, tfname, rname) in enumerate(
+        zip(resource_types, resource_tfnames, resource_names)
+    ):
+        print(" %2d.\t" % (i + 1) + to_table3c_row_format(rtype, tfname, rname))
+    print("--" * 55)
+
+
+def replace_text_in_double_quotes(erb_template, astring, bstring):
+    # To replace terraform resource names
+    logging.debug(" - Repace [{}] with [{}]".format(astring, bstring))
+    erb_template_len = len(erb_template)
+    erb_template = erb_template.replace('"{}"'.format(astring), '"{}"'.format(bstring))
+    if len(erb_template) == erb_template_len:
+        logging.warning(
+            "\nPlease check [{}] as text replacement did not work!!\n".format(astring)
+        )
+    return erb_template
+
+
+def _generate_erb_file_primary_resource_replacement(erb_template, resource_id):
+    # primary line
+    rtype, tfname, rname = (
+        resource_types[resource_id],
+        resource_tfnames[resource_id],
+        resource_names[resource_id],
+    )
+    tf_primary_resource_line = None
+    for line in resource_lines:
+        if rtype in line and tfname in line:
+            tf_primary_resource_line = line
+            break
+    if not tf_primary_resource_line:
+        raise Exception("Error: Failed to identify primary Line for replacement!")
+    else:
+        tf_primary_resource_new_line = get_template_primary_resource_line(
+            resource_types[resource_id]
+        )
+
+    logging.debug(
+        "Replace primary resource lines \n\t--->[{}]<----\n\t--->[{}]<----\n".format(
+            tf_primary_resource_line, tf_primary_resource_new_line
+        )
+    )
+    erb_template = erb_template.replace(
+        tf_primary_resource_line, tf_primary_resource_new_line
+    )
+    return erb_template
 
 
 def generate_erb_file(filename, resource_id):
     erb_template = open(filename).read()
+    # convert vars with vars template
     for k in resource_names:
-        erb_template = erb_template.replace(k, get_var_name(k))
-    erb_template = erb_template.replace(
-        resource_lines[resource_id],
-        get_primary_resource_line(resource_types[resource_id]),
+        erb_template = replace_text_in_double_quotes(
+            erb_template, k, get_template_tfvar_name(k)
+        )
+    # primary resource name replacement
+    erb_template = _generate_erb_file_primary_resource_replacement(
+        erb_template, resource_id
     )
+
     out_fname = os.path.basename(filename).split(".")[0] + ".tf.erb_check"
     with open(out_fname, "w") as fp:
         fp.write(erb_template)
@@ -158,7 +242,7 @@ def generate_teraform_yaml(filename, resource_id):
         )
     )
     for each in resource_names:
-        data.append(template_vars_prefix.format(clean_up_var_name(each), each))
+        data.append(template_vars_prefix.format(cleanup_tfvar_name(each), each))
     data.append(template_footer)
     out_fname = "terraform.yaml_check"
     with open(out_fname, "w") as fp:
@@ -169,27 +253,19 @@ def generate_teraform_yaml(filename, resource_id):
 
 def main(filename):
     # parse file to collect resources details
-    parse_file(filename)
-    if not len(resource_types) == len(resource_tfnames) == len(resource_names):
-        cprint("\nNoticed unexpected pattern! Plese check parsing logic!\n", "red")
-        raise Exception("Error: Failed to Parse file for details!")
+    tf_resource_parser(filename)
+
     # show terraform resources summary
-    cprint("\nTerraform Resources Summary", "blue", attrs=["bold"])
-    print("--" * 55)
-    print(" ID\t" + ppline("ResourceType", "TFLocalName", "ResourceName"))
-    for i, (rtype, tfname, rname) in enumerate(
-        zip(resource_types, resource_tfnames, resource_names)
-    ):
-        print(" %2d.\t" % (i + 1) + ppline(rtype, tfname, rname))
-    print("--" * 55)
-    #
+    show_tf_resources_table()
+
+    # user input
     resource_id = input(
         "\nFrom above a table please check and provide Primary Resource row ID: "
     )
     resource_id = int(resource_id) - 1
-    prepare_files = False
+    is_valid_user_input = False
     if 0 <= resource_id < len(resource_types):
-        prepare_files = True
+        is_valid_user_input = True
         rtype, tfname, rname = (
             resource_types[resource_id],
             resource_tfnames[resource_id],
@@ -199,7 +275,7 @@ def main(filename):
         print("TFLocalName\t: " + tfname)
         print("ResourceName\t: " + rname)
 
-    if prepare_files and input("\nEnter `yes` to proceed: ") == "yes":
+    if is_valid_user_input and input("\nEnter `yes` to proceed: ") == "yes":
         cprint("Created files", "blue")
         # create .tf.erb
         print(" - {}".format(generate_erb_file(filename, resource_id)))
