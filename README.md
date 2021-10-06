@@ -10,10 +10,10 @@ To convert Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`)
 
 To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
 
-__Tip:__ Use a descriptive filename for your `.tf` file. The filename is used for generating
-the `name` attribute in the `terraform.yaml` example block. For example, instead of naming your `.tf`
-file `main.tf`, name it `my-product-with-x-feature.tf`. For example:
-`int_https_lb_https_with_redirect.tf`.
+__Tip:__ Use a descriptive filename for your `.tf` file. For example, instead of naming
+your `.tf` file `main.tf`, name it `my-product-with-x-feature.tf`. For
+example: `int_https_lb_https_with_redirect.tf`. This filename is used for
+generating the `name` attribute in the `terraform.yaml` example block.
 
 ## Contributions
 
