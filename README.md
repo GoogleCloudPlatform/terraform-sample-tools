@@ -26,6 +26,11 @@ Available as a `tftools` command line utility tool, `tftools` is internally a wr
 __Note:__ 
 
 1. Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
+
+  __Tip:__ Use a descriptive filename for your `.tf` file. For example, instead of `main.tf`, use the pattern
+  `my-product-with-x-feature.tf`. For example: `int_https_lb_https_with_redirect.tf` for internal https load balancer with redirect. This filename is used for
+  generating the `name` attribute in the `terraform.yaml` example block.
+
 2. For some safety concerns files generated will have a suffix `_check`.
 
 # Install, Uninstall & Usage
@@ -92,6 +97,7 @@ $ tftools    magic_module_terraform_example.tf
 ```bash
 $ pip3 uninstall tftools
 ```
+
 
 ## Contributions
 
