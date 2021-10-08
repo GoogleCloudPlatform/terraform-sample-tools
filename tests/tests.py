@@ -6,7 +6,7 @@ import unittest
 import logging
 from shutil import copyfile
 
-PATH = ""
+
 sample_test_file = "external_http_lb_mig_backend_custom_header.tf"
 
 # logging settings
