@@ -1,96 +1,95 @@
-# Magic Modules Terraform Tools
+# Magic Modules - Terraform Tools
 
-Magic Modules Terraform utility tools for Terraform developers.
+Magic Modules Terraform utility tools is for Terraform developersn who want to develop/test terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
 
-`tftools` is a command line utility tool, which is internally a wrapper over the following tools but not a replacement.
+In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules) for leveraging the automated test valiations, every terraform example(say `main.tf`) is written in two files
 
-> For all simple single purpose tasks one can download only the required convert* scripts and check documentation within. It is not required to install this entire package!
-
-## Tool: Convert2tf
-
-To convert Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`) file.
-
-## Tool: Convert2erb
-
-To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
-
-__Note:__ 
-1. Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
-2. For some safety concerns files generated will have a suffic `_check`.
-
-# How to use?
+1. `.tf.erb` extension file: A ruby based template format file of `main.tf`.
+2. `terraform.yaml` config file: A ruby config file to update values in `.tf.erb`.
 
 
-## Installation
+Purpose of `tftools` is help developer to translate `.tf` to `.tf.erb` & `.yaml` or viceversa.
 
-Downloading files
-
-```bash
-cd /tmp
-git clone git@github.com:msampathkumar/MagicModules-TerraformTools.git
-cd MagicModules-TerraformTools/
+```
+                                [file: `main.tf`] ---- <tftools> ----> [file: `main.tf.erb`] & [file: `terraform.yaml`]
+ [file: `main.tf.erb`] & [file: `terraform.yaml`] ---- <tftools> ----> [file: `main.tf`]
 ```
 
-Install now
+Available as a `tftools` command line utility tool, `tftools` is internally a wrapper over the following python modules(individually executable scripts).
+
+- __Convert2tf__: To translate Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`) file.
+
+- __Convert2erb__: To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
+
+    _Limitation: In terraform file, with in the resources, the `name` attribute is expected to defined as the first attribute. This is for the convert2erb.py parser to recognise a resource and generate a variable name for .yaml config. Otherwise, for that resource no config .yaml variable is created and that resesource definition will be as-is copied to .erb template file._
+
+__Note:__ 
+
+1. Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
+2. For some safety concerns files generated will have a suffix `_check`.
+
+# Install, Uninstall & Usage
+
+### How to Install?
+
+To clone this repo run the following. Optionally, once can download as a .zip as well.
 
 ```bash
-# Development of command line utility is in branch named `command_line_tool`
-#   if you don't see setup.py in master branch, please do `git checkout command_line_tool`
+git clone git@github.com:msampathkumar/MagicModules-TerraformTools.git
+```
+
+Move to `setup.py` script location and install
+
+```bash
+cd MagicModules-TerraformTools/
 python setup.py install
 ```
 
-
-__Installation Check__
-
-To check if tftools installed properly, run following commands
-
+Check, to see if `tftools` is installed
 
 ```bash
-pip3 list | grep tftools
+pip show tftools
+```
 
+Check, to see if `tftools` are in user path
+
+```
 which tfools
 ```
 
-In MacOS - At times even after installation `tftools` might not be available in you in command line. This could be due to `PATH` issue. Recommendation is check & add following to your `~/.bash_profile` file(create it, if it does not exits) and restart your terminal/iterm.
+> In MacOS/Linux, at times even after installation `tftools` might not be available in you in command line. This could be due to `PATH` issue. Recommendation is check & add following to your `~/.bash_profile` file(create it, if it does not exits) and restart your terminal/iterm.
 
 ```
 alias python=python3
 alias pip=pip3
 alias tf=terraform
 
-export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin/":$PATH
+# In your bash terminal run `python -c 'import sys; print(sys.prefix + "/bin")'`
+#  to know you python library tools path & update below path
+export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH
 ```
 
-## Usage
+### How to use?
 
-As mentioned earlier, `tftools` is simple wrapper over `convert2erb` and `convert2tf` tools.
+How to generate .tf file ?
 
+From commandline provide `.tf.erb` and `.yaml` files as input for `tftools`, then it call `convert2tf` to generate a terraform `.tf` file.
 
-__How to generate .tf Code from .erb.tf & .yaml files?__
-
-If you pass a `.tf.erb` and `.yaml` file as input variables, then it call `convert2tf` to do requried `.tf` file generation.
-
+```bash
+$ tftools     magic_module_terraform_example.tf.erb     magic_module_terraform.yaml
 ```
 
-$ tftools magic_module_terraform_example.tf.erb magic_module_terraform.yaml
+How to generate .erb.tf ?
 
+From commandline provide `.tf` as input to `tftools`, then it cals `convert2erb` to the generate (`.erb.tf` and `.yaml`) files.
+
+```bash
+$ tftools    magic_module_terraform_example.tf
 ```
 
-__How to generate .erb.tf & .yaml from tf file?__
+### How to uninstall?
 
-If you pass `.tf` as input, then it cals `convert2erb` to the required (`.erb.tf` and `.yaml`) files generations.
-
-```
-
-$ tftools magic_module_terraform_example.tf
-
-```
-
-Usually files will be generated in location where command is executed!
-
-## Uninstall
-
-```
+```bash
 $ pip3 uninstall tftools
 ```
 

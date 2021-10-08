@@ -32,6 +32,10 @@ import re
 import logging
 from termcolor import colored
 
+# logging settings
+logging.basicConfig()
+# logging.getLogger().setLevel(logging.DEBUG)
+
 
 def show_warning(text):
     print(colored(color="red", text=str(text + "\n")))

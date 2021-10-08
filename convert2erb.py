@@ -46,6 +46,7 @@ resource_types, resource_tfnames, resource_names = [], [], []
 
 # yaml templates
 template_header = """
+      - !ruby/object:Provider::Terraform::Examples
         name: "{}"
         primary_resource_id: "{}"
         vars:
@@ -62,7 +63,8 @@ template_footer = """
         # ignore_read_extra:
         #   - "port_range"
         #   - "target"
-""".strip(
+        #   - "ip_address"
+""".lstrip(
     "\n"
 )
 
