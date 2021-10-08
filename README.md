@@ -2,17 +2,17 @@
 
 Magic Modules Terraform utility tools is for Terraform developersn who want to develop/test terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
 
-In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules) for leveraging the automated test valiations, every terraform example(say `main.tf`) is written in two files
+For leveraging the automated test valiations in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules), every terraform example(say `main.tf`) is written in two files
 
 1. `.tf.erb` extension file: A ruby based template format file of `main.tf`.
 2. `terraform.yaml` config file: A ruby config file to update values in `.tf.erb`.
 
 
-Purpose of `tftools` is help developer to translate `.tf` to `.tf.erb` & `.yaml` or viceversa.
+Purpose of `tftools` is help developer to translate `.tf` file to `.tf.erb` & `.yaml` files or viceversa.
 
 ```
-                                [file: `main.tf`] ---- <tftools> ----> [file: `main.tf.erb`] & [file: `terraform.yaml`]
- [file: `main.tf.erb`] & [file: `terraform.yaml`] ---- <tftools> ----> [file: `main.tf`]
+                             [file: main.tf] ---- [tftools] ----> [file: main.tf.erb] & [file: terraform.yaml]
+[file: main.tf.erb] & [file: terraform.yaml] ---- [tftools] ----> [file: main.tf]
 ```
 
 Available as a `tftools` command line utility tool, `tftools` is internally a wrapper over the following python modules(individually executable scripts).
@@ -26,14 +26,10 @@ Available as a `tftools` command line utility tool, `tftools` is internally a wr
 __Note:__ 
 
 1. Please use a proper file name for `.tf` files, as filename is used for generating `.yaml` file module section
-
-  __Tip:__ Use a descriptive filename for your `.tf` file. For example, instead of `main.tf`, use the pattern
-  `my-product-with-x-feature.tf`. For example: `int_https_lb_https_with_redirect.tf` for internal https load balancer with redirect. This filename is used for
-  generating the `name` attribute in the `terraform.yaml` example block.
+  
+  > __Tip:__ Use a descriptive filename for your `.tf` file. For example, instead of `main.tf`,  use the pattern `my-product-with-x-feature.tf`. For example: `int_https_lb_https_with_redirect.tf` for internal https load balancer with redirect. This filename is used for generating the `name` attribute in the `terraform.yaml` example block.
 
 2. For some safety concerns files generated will have a suffix `_check`.
-
-# Install, Uninstall & Usage
 
 ### How to Install?
 
@@ -70,23 +66,19 @@ alias pip=pip3
 alias tf=terraform
 
 # In your bash terminal run `python -c 'import sys; print(sys.prefix + "/bin")'`
-#  to know you python library tools path & update below path
+#  to know you python library tools path & update below python path accordingly.
 export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH
 ```
 
 ### How to use?
 
-How to generate .tf file ?
-
-From commandline provide `.tf.erb` and `.yaml` files as input for `tftools`, then it call `convert2tf` to generate a terraform `.tf` file.
+From command line provide `.tf.erb` and `.yaml` files as input for `tftools`, then it calls `convert2tf` script to generate a terraform `.tf` file.
 
 ```bash
 $ tftools     magic_module_terraform_example.tf.erb     magic_module_terraform.yaml
 ```
 
-How to generate .erb.tf ?
-
-From commandline provide `.tf` as input to `tftools`, then it cals `convert2erb` to the generate (`.erb.tf` and `.yaml`) files.
+From commandline provide `.tf` as input to `tftools`, then it interall calls `convert2erb` script to the generate (`.erb.tf` and `.yaml`) files.
 
 ```bash
 $ tftools    magic_module_terraform_example.tf
