@@ -37,6 +37,11 @@ from termcolor import colored, cprint
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)
 
+
+def show_warning(text):
+    print(colored(color="red", text=str(text + "\n")))
+
+
 tf_lines = []
 resource_lines = []
 resource_name_lines = []
@@ -266,7 +271,7 @@ def generate_erb_yaml_files(filename, pm_resource_id):
     print(" - {}".format(_generate_teraform_yaml(filename, pm_resource_id)))
 
 
-def main(filename):
+def convert_to_erb(filename):
     # parse file to collect resources details
     tf_resource_parser(filename)
 
@@ -300,10 +305,16 @@ def parse_user_args(args):
         if each.endswith(".tf"):
             filename = each
     if not (os.path.isfile(filename) and filename.endswith(".tf")):
-        raise Exception("FileInputError: Expected .tf as input")
-    main(filename)
+        text = "\nFileInputError: Expected a valid `.tf` file path as input"
+        show_warning(text)
+        raise Exception("Missing command line input")
+    convert_to_erb(filename)
+
+
+def main():
+    print("Args:", sys.argv)
+    parse_user_args(sys.argv)
 
 
 if __name__ == "__main__":
-    print("Args:", sys.argv)
-    parse_user_args(sys.argv)
+    main()

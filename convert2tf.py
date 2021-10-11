@@ -73,7 +73,7 @@ def get_key_value_pairs(kv_lines):
     return my_dict
 
 
-def main(tf_file_name, vars_file):
+def convert_to_tf(tf_file_name, vars_file):
     tf_file = open(tf_file_name).read().strip()
     section_name = os.path.basename(tf_file_name).split(".")[0]
     vars_dict = get_key_value_pairs(find_tf_section(vars_file, section_name))
@@ -119,14 +119,18 @@ def parse_user_args(args):
         elif each.endswith(".yaml"):
             vars_file = each
     if not tf_file_name:
-        show_warning("\nExpected `.tf.erb` file as the first input arg")
+        show_warning("\nExpected a valid `.tf.erb` file as the first input arg")
         raise Exception("Missing command line input")
     if not vars_file:
-        show_warning("\nExpected `.yaml` file as the second input arg")
+        show_warning("\nExpected a valid `.yaml` file as the second input arg")
         raise Exception("Missing command line input")
-    main(tf_file_name, vars_file)
+    convert_to_tf(tf_file_name, vars_file)
+
+
+def main():
+    print("Args:", sys.argv)
+    parse_user_args(sys.argv)
 
 
 if __name__ == "__main__":
-    print("Args:", sys.argv)
-    parse_user_args(sys.argv)
+    main()
