@@ -1,23 +1,24 @@
 # Magic Modules - Terraform Tools
 
-__TL;DR__: Magic Modules Terraform utility tools is for Terraform developers who want to develop/test terraform snippets in Magic Modules.
+Magic Modules Terraform tools is a utility written in python3 for Terraform developers, who want to develop/test terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
+
+> This repo in development mode. If you are interested to be part of this development, you can check the "Contributions" section.
 
 In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules), every terraform example(say `main.tf`) is written in two files
 
 1. `main.tf.erb` extension file: A ruby based template file of `main.tf`.
 2. `terraform.yaml` config file: A ruby config file for the above template file.
 
-Purpose of this tool is help developers to translate `.tf` file to `.tf.erb` & `.yaml` files or viceversa. This eliminates the necessity of manually writting ruby template and ruby config files.
+Purpose of this tool is help developers to translate `.tf` file to `.tf.erb` & `.yaml` files or viceversa, which otherwise are done manually.
 
 ```
                        [Inputs: main.tf] ---- [tftools] ----> [Output: main.tf.erb  &  terraform.yaml]
 [Inputs: main.tf.erb  &  terraform.yaml] ---- [tftools] ----> [Output: main.tf]
 ```
 
-
 ## UserTools
 
-On installation, `tftools`, `convert2tf` & `convert2erb` command line tools are available to user.
+On installation, `tftools`, `convert2tf` & `convert2erb` command line utility tools are available to user.
 
 - _convert2tf_: To translate Magic Module terraform template(`.tf.erb`) files to terraform (`.tf`) file.
 - _convert2erb_: To convert a terraform file (`.tf`) into Magic Module terraform templates files (`.tf.erb` and `.yaml`)
@@ -29,7 +30,7 @@ _Note:_
 1. For Terraform samples pull requests to Magic Modules, use a descriptive filename for your `.tf` files. As filename is used for generating the `name` attribute in the `.yaml` file block.
     - For example, instead of `main.tf`,  use the pattern `my-product-with-x-feature.tf`.
     - For example: `int_https_lb_https_with_redirect.tf` for internal https load balancer with redirect.
-1. _convert2erb_ Limitation: In terraform file, with in the resources, the `name` attribute is expected to defined as the first attribute. This is for the convert2erb parser to recognise a resource and generate a variable name for .yaml config. Otherwise, for that resource no config .yaml variable is created and that resesource definition will be as-is copied to .erb template file._
+1. _convert2erb_ Limitation: In terraform file, with in the resources, the `name` attribute is expected to defined as the first attribute. This is for the convert2erb parser to recognise a resource and generate a variable name for .yaml config. Otherwise, for that resource no config .yaml variable is created and that resesource definition will be as-is copied to .erb template file.
 
 ### How to Install?
 
@@ -93,10 +94,11 @@ _Note:_
 
 ### How to uninstall?
 
+Use you standard `pip3` tool for uninstallation
+
 ```bash
 $ pip3 uninstall tftools
 ```
-
 
 ## Contributions
 
