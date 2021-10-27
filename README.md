@@ -37,7 +37,7 @@ _Note:_
 - Step1: Clone this repo or optionally, one can download as a .zip as well.
 
   ```bash
-  git clone git@github.com:msampathkumar/MagicModules-TerraformTools.git
+  git clone https://github.com/msampathkumar/MagicModules-TerraformTools.git
   ```
 
 - Step2: Move to `setup.py` script location path and install
