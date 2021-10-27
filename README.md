@@ -71,6 +71,15 @@ _Note:_
   #  to know your python library tools path & update below python path accordingly.
   export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH
   ```
+  
+  For Macs, you can use the following procedure to update your path:
+  
+  1. Open up Terminal.
+  1. Run the following command: `sudo nano /etc/paths`
+  1. Enter your password, when prompted.
+  1. Go to the bottom of the file, and enter the following path: `/Library/Frameworks/Python.framework/Versions/3.6/bin`
+  1. Press control-x to quit.
+  1. Enter `Y` to save the file.
 
 ### How to use?
 
