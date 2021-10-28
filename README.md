@@ -64,7 +64,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    /Library/Frameworks/Python.framework/Versions/3.x/bin//tftools
    ```
   
-  If you dont see the expected output, proceed to the next step to resolve your path issue.
+   If you dont see the expected output, proceed to the next step to resolve your path issue.
 
 1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. Check and add the following to your `~/.bash_profile` file (create it, if it does not exist) and restart your terminal or iterm.
 
