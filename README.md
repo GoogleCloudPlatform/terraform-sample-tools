@@ -17,7 +17,7 @@ If you have `filename.tf.erb` file and `terraform.yaml` content as your input, y
 To summarize:
 
 ```
-                       [Inputs: filename.tf] ---- [tftools] ----> [Output: filename.tf.erb_check  &  terraform.yaml_check]
+[Inputs: filename.tf] ---- [tftools] ----> [Output: filename.tf.erb_check  &  terraform.yaml_check]
 [Inputs: filename.tf.erb  &  terraform.yaml] ---- [tftools] ----> [Output: filename.tf]
 ```
 
@@ -119,17 +119,17 @@ Now that you have prepared your `descriptive-and-unique-filename.tf` file, you c
 
 1. From the command line, provide `descriptive-and-unique-filename.tf` as input to `tftools`:
 
-  ```bash
-  $ tftools descriptive-and-unique-filename.tf
+    ```bash
+    $ tftools descriptive-and-unique-filename.tf
 
-  # (Alternative) This also works:
-  $ convert2erb descriptive-and-unique-filename.tf
-  ```
+    # (Alternative) This also works:
+    $ convert2erb descriptive-and-unique-filename.tf
+    ```
   
-  The following output files are generated from the location where the script is executed:
+    The following output files are generated from the location where the script is executed:
 
-  * `descriptive-and-unique-filename.tf.erb_check`
-  * `terraform.yaml_check`
+    * `descriptive-and-unique-filename.tf.erb_check`
+    * `terraform.yaml_check`
 
 1. After checking the output and confirming that you want to keep it, remove `_check` from `descriptive-and-unique-filename.tf.erb_check`.
 
@@ -144,13 +144,13 @@ Now you can do a pull request to add your content to Magic Modules.
 * Add `descriptive-and-unique-filename.tf.erb` to the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
 * Add the content inside of your `terraform.yaml_check` to the correct `terraform.yaml`, depending on your product. For example, for Cloud Run, you would add your `terraform.yaml_check` content to `https://github.com/GoogleCloudPlatform/magic-modules/blob/master/mmv1/products/cloudrun/terraform.yaml`.
 
-For detailed instructions, see the [Include Terraform snippets](https://cloud.google.com/guides/authoring/terraform-snippets) page.
+For detailed instructions on creating a pull request for Magic Modules, see the [Include Terraform snippets](https://cloud.google.com/guides/authoring/terraform-snippets) page.
 
 ### Generate a new `.tf` file from the Ruby files
 
 In your workflow, you might make some changes in your Ruby file and then need to retest in Terraform to make sure your example still works. Because you can't directly test a `tf.erb` file, you must generate a new `.tf` file.
 
-1. From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
+From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
 
   ```bash
   $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
