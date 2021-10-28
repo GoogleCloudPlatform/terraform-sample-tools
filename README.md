@@ -33,26 +33,26 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 ## How to install
 
-- Step 1: Clone this repo. Or, optionally, you can download the `.zip` file.
+1. Clone this repo. Or, optionally, you can download the `.zip` file.
 
   ```bash
   git clone https://github.com/msampathkumar/MagicModules-TerraformTools.git
   ```
 
-- Step 2: Move to the `setup.py` script location path and install.
+1. Move to the `setup.py` script location path and install.
 
   ```bash
   cd MagicModules-TerraformTools/
   python3 setup.py install
   ```
 
-- Step 3: Verify that `tftools` is installed.
+1. Verify that `tftools` is installed.
 
   ```bash
   pip show tftools
   ```
 
-- Step 4: Verify that `tftools` is in your user path.
+1. Verify that `tftools` is in your user path.
 
   ```bash
   which tfools
@@ -64,9 +64,9 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
   /Library/Frameworks/Python.framework/Versions/3.x/bin//tftools
   ```
   
-  If you dont see the expected output, proceed to Step 5 to resolve your path issue.
+  If you dont see the expected output, proceed to the next step to resolve your path issue.
 
-- Step 5: After installation `tftools` might not be available in the command line. This could be due to a `PATH` issue. The recommendation is check and add the following to your `~/.bash_profile` file (create it, if it does not exist) and restart your terminal/iterm.
+1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. Check and add the following to your `~/.bash_profile` file (create it, if it does not exist) and restart your terminal or iterm.
 
   ```bash
   alias python=python3
@@ -119,12 +119,12 @@ Now that you have prepared your `descriptive-and-unique-filename.tf` file, you c
 
 1. From the command line, provide `descriptive-and-unique-filename.tf` as input to `tftools`:
 
-    ```bash
-    $ tftools descriptive-and-unique-filename.tf
+   ```bash
+   $ tftools descriptive-and-unique-filename.tf
 
-    # (Alternative) This also works:
-    $ convert2erb descriptive-and-unique-filename.tf
-    ```
+   # (Alternative) This also works:
+   $ convert2erb descriptive-and-unique-filename.tf
+   ```
     
 1. When prompted, select a resource to be the primary one. The primary resource should be the most important or canonical resource in the snippet.
   
@@ -160,12 +160,12 @@ In your workflow, you might make some changes in your Ruby file and then need to
    
 1. From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
 
-  ```bash
-  $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
+   ```bash
+   $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
 
-  # (Alternavitely) This also works
-  $ convert2tf   magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
-  ```
+   # (Alternavitely) This also works
+   $ convert2tf   magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
+   ```
   
   The script outputs an updated `.tf` file. In this example, `magic_module_terraform_example.tf`.
 
