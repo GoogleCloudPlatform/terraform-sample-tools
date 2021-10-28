@@ -137,7 +137,7 @@ Now that you have prepared your `descriptive-and-unique-filename.tf` file, you c
    mv descriptive-and-unique-filename.tf.erb_check descriptive-and-unique-filename.tf.erb
    ```
    
-   Note: You don't need to remove `_check` from `terraform.yaml_check`.
+   Note: At this point, you don't need to remove `_check` from `terraform.yaml_check`.
 
 Now you can do a pull request to add your content to Magic Modules.
 
@@ -150,7 +150,13 @@ For detailed instructions on creating a pull request for Magic Modules, see the 
 
 In your workflow, you might make some changes in your Ruby file and then need to retest in Terraform to make sure your example still works. Because you can't directly test a `tf.erb` file, you must generate a new `.tf` file.
 
-From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
+1. Remove `_check` from `terraform.yaml_check`.
+
+   ```
+   mv terraform.yaml_check terraform.yaml
+   ```
+   
+1. From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
 
   ```bash
   $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
