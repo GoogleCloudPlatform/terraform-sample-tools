@@ -125,6 +125,8 @@ Now that you have prepared your `descriptive-and-unique-filename.tf` file, you c
     # (Alternative) This also works:
     $ convert2erb descriptive-and-unique-filename.tf
     ```
+    
+1. When prompted, select a resource to be the primary one. The primary resource should be the most important or canonical resource in the snippet.
   
     The following output files are generated from the location where the script is executed:
 
