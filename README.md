@@ -1,6 +1,6 @@
-# Magic Modules - Terraform Tools
+# Magic Modules - Terraform Automation Tools
 
-The Magic Modules Terraform Tools (`tftools`) are utilities written in Python3 for Terraform developers who want to develop and test Terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
+The Magic Modules Terraform Automation Tools (`tftools`) are utilities written in Python3 for Terraform developers who want to develop and test Terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
 
 > This repo in development mode. To contribute to this repo, see the [contributing guidelines](CONTRIBUTING.md).
 
