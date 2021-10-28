@@ -17,7 +17,7 @@ The purpose of `tftools` is to automatically translate back and forth between th
 To summarize:
 
 ```
-[Inputs: filename.tf] ---- [tftools] ----> [Output: filename.tf.erb_check  &  terraform.yaml_check]
+[Input: filename.tf] ---- [tftools] ----> [Outputs: filename.tf.erb_check  &  terraform.yaml_check]
 
 [Inputs: filename.tf.erb  &  terraform.yaml] ---- [tftools] ----> [Output: filename.tf]
 ```
