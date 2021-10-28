@@ -2,6 +2,8 @@
 
 The Magic Modules Terraform Automation Tools (`tftools`) are utilities written in Python3 for Terraform developers who want to develop and test Terraform snippets in [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules).
 
+As input, the script takes a `filename.tf` and outputs `filename.tf.erb` plus `terraform.yaml` content. The tool lets you do the reverse as well.
+
 > This repo in development mode. To contribute to this repo, see the [contributing guidelines](CONTRIBUTING.md).
 
 In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules), every Terraform example (`filename.tf`) is represented by two files, as follows:
@@ -11,13 +13,12 @@ In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules), every 
 
 The purpose of `tftools` is to automatically translate back and forth between the Terraform example (`filename.tf`) to the Magic Modules Ruby files (`filename.tf.erb` file and `terraform.yaml`). Without `tftools`, the translation must be done manually.
 
-If you have a `filename.tf` as your input, you can run `tftools` to create a `filename.tf.erb` file and `terraform.yaml` content.
-If you have `filename.tf.erb` file and `terraform.yaml` content as your input, you can run `tftools` to create a `filename.tf` file.
 
 To summarize:
 
 ```
 [Inputs: filename.tf] ---- [tftools] ----> [Output: filename.tf.erb_check  &  terraform.yaml_check]
+
 [Inputs: filename.tf.erb  &  terraform.yaml] ---- [tftools] ----> [Output: filename.tf]
 ```
 
