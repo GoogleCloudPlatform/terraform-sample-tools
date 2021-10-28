@@ -166,6 +166,8 @@ In your workflow, you might make some changes in your Ruby file and then need to
   # (Alternavitely) This also works
   $ convert2tf   magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
   ```
+  
+  The script outputs an updated `.tf` file. In this example, `magic_module_terraform_example.tf`.
 
 ### How to uninstall
 
