@@ -35,48 +35,48 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 1. Clone this repo. Or, optionally, you can download the `.zip` file.
 
-  ```bash
-  git clone https://github.com/msampathkumar/MagicModules-TerraformTools.git
-  ```
+   ```bash
+   git clone https://github.com/msampathkumar/MagicModules-TerraformTools.git
+   ```
 
 1. Move to the `setup.py` script location path and install.
 
-  ```bash
-  cd MagicModules-TerraformTools/
-  python3 setup.py install
-  ```
+   ```bash
+   cd MagicModules-TerraformTools/
+   python3 setup.py install
+   ```
 
 1. Verify that `tftools` is installed.
 
-  ```bash
-  pip show tftools
-  ```
+   ```bash
+   pip show tftools
+   ```
 
 1. Verify that `tftools` is in your user path.
 
-  ```bash
-  which tfools
-  ```
+   ```bash
+   which tfools
+   ```
   
-  Expected output:
+   Expected output:
   
-  ```
-  /Library/Frameworks/Python.framework/Versions/3.x/bin//tftools
-  ```
+   ```
+   /Library/Frameworks/Python.framework/Versions/3.x/bin//tftools
+   ```
   
   If you dont see the expected output, proceed to the next step to resolve your path issue.
 
 1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. Check and add the following to your `~/.bash_profile` file (create it, if it does not exist) and restart your terminal or iterm.
 
-  ```bash
-  alias python=python3
-  alias pip=pip3
-  alias tf=terraform
+   ```bash
+   alias python=python3
+   alias pip=pip3
+   alias tf=terraform
 
-  # In your bash terminal run `python3 -c 'import sys; print(sys.prefix + "/bin")'`
-  #  to know your python library tools path and update following python path accordingly.
-  export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH. # Change to the version shown in 
-  ```
+   # In your bash terminal run `python3 -c 'import sys; print(sys.prefix + "/bin")'`
+   #  to know your python library tools path and update following python path accordingly.
+    export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH. # Change to the version shown in 
+   ```
   
   Alternatively, for Macs, you can use the following procedure to update your path:
   
@@ -92,13 +92,13 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 ### Prepare your `filename.tf` file for conversion
 
 1. Get or create a Terraform file (`filename.tf`).
-2. Use a descriptive filename for your `filename.tf`. Instead of `main.tf` (for example), use the pattern `my-product-with-x-feature.tf`. For example:   `int_https_lb_https_with_redirect.tf` for internal HTTPS load balancer with redirect. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
+1. Use a descriptive filename for your `filename.tf`. Instead of `main.tf` (for example), use the pattern `my-product-with-x-feature.tf`. For example:   `int_https_lb_https_with_redirect.tf` for internal HTTPS load balancer with redirect. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
 
    ```
    mv main.tf descriptive-and-unique-filename.tf
    ```
    
-4. In your file, within each resource, make sure that the `name` attribute is the first attribute. For example:
+1. In your file, within each resource, make sure that the `name` attribute is the first attribute. For example:
 
    ```
    resource "google_compute_health_check" "default" {
