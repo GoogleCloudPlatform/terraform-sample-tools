@@ -1,4 +1,16 @@
-#! /usr/local/bin/python3
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
 Magic Modules Terraform Scripts testing(helper) tool!
 
@@ -6,7 +18,7 @@ Job of this script to convert .tf into .erb & .yaml file.
 
 ## How to use this script?
 
-1. Download this script. 
+1. Download this script.
 2. Make this script executeable: `chmod +x convert2erb.py`.
 3. Run `pip3 install termcolor`.
 4. Run the script: `./convert2erb.py <filename>.tf`
