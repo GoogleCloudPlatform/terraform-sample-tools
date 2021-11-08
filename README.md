@@ -1,6 +1,6 @@
-# Cloud Developer Tools
+# Terraform Sample Tools
 
-Tools & Solution for developer who want to contribute to [magic-modules](https://github.com/GoogleCloudPlatform/magic-modules), [python-docs-samples](https://github.com/GoogleCloudPlatform/python-docs-samples) and other repos. under [GoogleCloudPlatform](https://github.com/GoogleCloudPlatform)
+Tools & Solution for Terraform developer who want to contribute to [magic-modules](https://github.com/GoogleCloudPlatform/magic-modules), [python-docs-samples](https://github.com/GoogleCloudPlatform/python-docs-samples) and other repos under [GoogleCloudPlatform](https://github.com/GoogleCloudPlatform)
 
 ## Tools
 
