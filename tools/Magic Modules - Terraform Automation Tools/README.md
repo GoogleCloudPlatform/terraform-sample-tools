@@ -37,7 +37,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 1. Clone this repo. Or, optionally, you can download the `.zip` file.
 
    ```bash
-   git clone https://github.com/msampathkumar/MagicModules-TerraformTools.git
+   git clone https://github.com/GoogleCloudPlatform/terraform-sample-tools.git
    ```
 
 1. Move to the `setup.py` script location path and install.
