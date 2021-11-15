@@ -43,7 +43,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 1. Move to the `setup.py` script location path and install.
 
    ```bash
-   cd MagicModules-TerraformTools/
+   cd terraform-sample-tools/tools/Magic Modules - Terraform Automation Tools/
    python3 setup.py install
    ```
 
@@ -82,11 +82,16 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
   Alternatively, for Macs, you can use the following procedure to update your path:
   
   1. Open up Terminal.
-  1. Run the following command: `sudo nano /etc/paths`
-  1. Enter your password, when prompted.
-  1. Go to the bottom of the file and enter the correct path, as shown in the output of `python3 -c 'import sys; print(sys.prefix + "/bin")'. For example: `/Library/Frameworks/Python.framework/Versions/3.6/bin`
-  1. Press control-x to quit.
-  1. Enter `Y` to save the file.
+  2. Run the following command and copy the output to your clipboard.
+     ```
+     python3 -c 'import sys; print(sys.prefix + "/bin")'
+     ```
+     
+  3. Run the following command: `sudo nano /etc/paths`
+  4. Enter your password, when prompted.
+  5. Go to the bottom of the file and paste the output from the previous step.
+  6. Press control-x to quit.
+  7. Enter `Y` to save the file.
 
 ## How to use `tftools`
 
