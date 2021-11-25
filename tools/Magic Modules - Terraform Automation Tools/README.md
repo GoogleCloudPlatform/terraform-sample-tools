@@ -56,7 +56,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 1. Verify that `tftools` is in your user path.
 
    ```bash
-   which tfools
+   which tftools
    ```
   
    Expected output:
