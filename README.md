@@ -4,7 +4,7 @@ Tools & Solution for Terraform developer who want to contribute to [magic-module
 
 ## Tools
 
-- [Magic Modules - Terraform Automation Tools](/tools/Magic%20Modules%20-%20Terraform%20Automation%20Tools): Provides `tftools` commandline utility to easy convertion Terraform code snippet into Magic Module Terraform Snippet or vice-versa.
+- [Magic Modules - Tftools](tools/magic-modules-tftools/): Provides `tftools` commandline utility to easy convertion Terraform code snippet into Magic Module Terraform Snippet or vice-versa.
 
 
 ## Contributions

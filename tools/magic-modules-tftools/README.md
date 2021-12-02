@@ -16,11 +16,42 @@ The purpose of `tftools` is to automatically translate back and forth between th
 
 To summarize:
 
-```
-[Input: filename.tf] ---- [tftools] ----> [Outputs: filename.tf.erb_check  &  terraform.yaml_check]
+    ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                            │
+    │                                                                                                            │
+    │                                                                                                            │
+    │       ┌───────────────────┐                TFtools                       ┌───────────────────────────┐     │
+    │       │  my_app_setup.tf  │ ─────────────────────────────┬───────────►   │  my_app_setup.tf.erb      │     │
+    │       └───────────────────┘                              │               └───────────────────────────┘     │
+    │                                                          │                                                 │
+    │                                                          │               ┌───────────────────────────┐     │
+    │      A standard terraform file                           └───────────►   │ terraform.yaml            │     │
+    │                                                                          └───────────────────────────┘     │
+    │                                                                                                            │
+    │                                                                 Google's Magic Module terraform template   │
+    │                                                                                                            │
+    │                                                                           & yaml config files              │
+    │                                                                                                            │
+    └────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+    
+    ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                            │
+    │                                                                                                            │
+    │                                                                                                            │
+    │   ┌───────────────────────────┐             TFtools                       ┌───────────────────┐            │
+    │   │  my_app_setup.tf.erb      │  ────────┬──────────────────────────────► │  my_app_setup.tf  │            │
+    │   └───────────────────────────┘          │                                └───────────────────┘            │
+    │                                          │                                                                 │
+    │   ┌───────────────────────────┐          │                                                                 │
+    │   │ terraform.yaml            │  ────────┘                               A standard terraform file         │
+    │   └───────────────────────────┘                                                                            │
+    │                                                                                                            │
+    │    Google's Magic Module terraform template                                                                │
+    │                                                                                                            │
+    │              & yaml config files                                                                           │
+    │                                                                                                            │
+    └────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-[Inputs: filename.tf.erb  &  terraform.yaml] ---- [tftools] ----> [Output: filename.tf]
-```
 
 Note: The `_check` extension is added to prevent accidental overwrite of files that you might be working on in your output directory.
 
@@ -43,7 +74,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 1. Move to the `setup.py` script location path and install.
 
    ```bash
-   cd terraform-sample-tools/tools/Magic Modules - Terraform Automation Tools/
+   cd terraform-sample-tools/tools/tools/magic-modules-tftools/
    python3 setup.py install
    ```
 
