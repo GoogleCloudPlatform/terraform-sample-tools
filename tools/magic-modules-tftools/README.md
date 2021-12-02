@@ -130,13 +130,35 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 ### Prepare your `filename.tf` file for conversion
 
 1. Get or create a Terraform file (`filename.tf`).
-1. Use a descriptive filename for your `filename.tf`. Instead of `main.tf` (for example), use the pattern `my-product-with-x-feature.tf`. For example:   `int_https_lb_https_with_redirect.tf` for internal HTTPS load balancer with redirect. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
+2. In your `filename.tf` file, don't include the `random_pet` resource or any other resource for generating unique resource names. These resources are unnecessary because Magic Modules automatically generates unique names when testing resources that have the `vars` tag, as follows:
+
+  ```
+  resource "google_compute_backend_bucket" "static" {
+    name        = "<%= ctx[:vars]['backend_bucket_name'] %>"
+    bucket_name = google_storage_bucket.static.name
+    enable_cdn  = true
+  }
+  ```
+  
+  Thus, in your `filename.tf` file, you can include the something like the following:
+  
+  ```
+  resource "google_compute_backend_bucket" "static" {
+    name        = "backend-bucket-name"
+    bucket_name = google_storage_bucket.static.name
+    enable_cdn  = true
+  }
+  ```
+  
+  If your `filename.tf` file includes a reference to `random_pet` in the `name` argument, `tftools` operation fails with a parsing error.
+
+3. Use a descriptive filename for your `filename.tf`. Instead of `main.tf` (for example), use the pattern `my-product-with-x-feature.tf`. For example:   `int-https-lb-https-with-redirect.tf` for internal HTTPS load balancer with redirect. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
 
    ```
    mv main.tf descriptive-and-unique-filename.tf
    ```
    
-1. In your file, within each resource, make sure that the `name` attribute is the first attribute. For example:
+4. In your file, within each resource, make sure that the `name` attribute is the first attribute. For example:
 
    ```
    resource "google_compute_health_check" "default" {
