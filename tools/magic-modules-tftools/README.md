@@ -52,6 +52,7 @@ To summarize:
     │                                                                                                            │
     └────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
+Chart Credits: https://github.com/lewish/asciiflow
 
 Note: The `_check` extension is added to prevent accidental overwrite of files that you might be working on in your output directory.
 
