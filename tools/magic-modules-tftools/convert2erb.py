@@ -279,7 +279,8 @@ def _generate_teraform_yaml(filename, resource_id):
     data = []
     data.append(
         template_header.format(
-            os.path.basename(filename).split(".")[0], resource_tfnames[resource_id].replace('-', '_')
+            os.path.basename(filename).split(".")[0],
+            resource_tfnames[resource_id].replace("-", "_"),
         )
     )
     for each in resource_names:
