@@ -76,13 +76,13 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
    ```bash
    cd terraform-sample-tools/tools/tools/magic-modules-tftools/
-   python3 setup.py install
+   sudo python3 setup.py install
    ```
 
 1. Verify that `tftools` is installed.
 
    ```bash
-   pip show tftools
+   pip3 show tftools
    ```
 
 1. Verify that `tftools` is in your user path.
@@ -90,40 +90,31 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    ```bash
    which tftools
    ```
-  
-   Expected output:
-  
-   ```
-   /Library/Frameworks/Python.framework/Versions/3.x/bin//tftools
-   ```
-  
-   If you dont see the expected output, proceed to the next step to resolve your path issue.
 
-1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. Check and add the following to your `~/.bash_profile` file (create it, if it does not exist) and restart your terminal or iterm.
+1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. To fix:
+   a. Run the following command and copy the output to your clipboard.
+   
+      ```bash
+      python3 -c 'import sys; print(sys.prefix + "/bin")'
+      ```
+   b. Add the following to your `~/.bash_profile` file (create it, if it does not exist). Replace <PATH> with the output from the previous step.
 
-   ```bash
-   alias python=python3
-   alias pip=pip3
-   alias tf=terraform
-
-   # In your bash terminal run `python3 -c 'import sys; print(sys.prefix + "/bin")'`
-   #  to know your python library tools path and update following python path accordingly.
-    export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin":$PATH. # Change to the version shown in 
-   ```
+      ```bash
+      export PATH="<PATH>":$PATH.  
+      ```
+   c. Restart your terminal or iterm.
   
   Alternatively, for Macs, you can use the following procedure to update your path:
   
-  1. Open up Terminal.
-  2. Run the following command and copy the output to your clipboard.
-     ```
-     python3 -c 'import sys; print(sys.prefix + "/bin")'
-     ```
+   a. Open up Terminal.
+   b. Run the following command and copy the output to your clipboard.
+ 
+      ```
+      python3 -c 'import sys; print(sys.prefix + "/bin")'
+      ```
      
-  3. Run the following command: `sudo nano /etc/paths`
-  4. Enter your password, when prompted.
-  5. Go to the bottom of the file and paste the output from the previous step.
-  6. Press control-x to quit.
-  7. Enter `Y` to save the file.
+   c. At the bottom of `/etc/paths`, paste the output from the previous step.
+
 
 ## How to use `tftools`
 
