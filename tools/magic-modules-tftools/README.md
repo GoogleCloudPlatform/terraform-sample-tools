@@ -123,7 +123,25 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 ### Prepare your `filename.tf` file for conversion
 
 1. Get or create a Terraform file (`filename.tf`).
-2. In your `filename.tf` file, don't include the `random_pet` resource or any other resource for generating unique resource names. These resources are unnecessary because Magic Modules automatically generates unique names when testing resources that have the `vars` tag, as follows:
+
+2. Use a descriptive name for your Terraform file. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples). So instead of `main.tf`, use the pattern `my-product-with-x-feature.tf`. For example: `int-https-lb-https-with-redirect.tf` for internal HTTPS load balancer with redirect.
+
+3. In your Terraform file, within each resource, make sure that the `name` argument is the first argument. For example:
+
+   ```
+   resource "google_compute_health_check" "default" {
+     name               = "health-check-name"  # `name` argument is listed first in this resource
+     ...
+   }
+   resource "google_compute_network" "default" {
+     name               = "network-name"  # `name` argument is listed first in this resource
+     ...
+   }
+   ```
+ 
+   This is required for the `convert2erb` parser to recognize a resource and generate a variable name for the `terraform.yaml` config. Otherwise, for that resource no config `terrarform.yaml` variable is created, and that resesource definition will be copied as-is to the `.tf.erb` template file.
+   
+4. In your Terraform file, after you are finished with local testing, remove any resources for generating unique resource names, such as `random_pet`. These resources are unnecessary because Magic Modules automatically generates unique names when testing resources that have the `vars` tag, as follows:
 
   ```
   resource "google_compute_backend_bucket" "static" {
@@ -133,38 +151,17 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
   }
   ```
   
-  Therefore, in your `filename.tf` file, you can include something like the following, where the name of the bucket isn't globally unique:
+  Therefore, in your Terraform file, you can include something like the following, where the name of the bucket isn't globally unique:
   
   ```
   resource "google_compute_backend_bucket" "static" {
-    name        = "backend-bucket-name"
+    name        = "backend-bucket-name"  # Generic, non-unique bucket name
     bucket_name = google_storage_bucket.static.name
     enable_cdn  = true
   }
   ```
   
-  If your `filename.tf` file includes a reference to `random_pet` in the `name` argument, `tftools` operation fails with a parsing error.
-
-3. Use a descriptive filename for your `filename.tf`. Instead of `main.tf` (for example), use the pattern `my-product-with-x-feature.tf`. For example:   `int-https-lb-https-with-redirect.tf` for internal HTTPS load balancer with redirect. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples).
-
-   ```
-   mv main.tf descriptive-and-unique-filename.tf
-   ```
-   
-4. In your file, within each resource, make sure that the `name` attribute is the first attribute. For example:
-
-   ```
-   resource "google_compute_health_check" "default" {
-     name               = "health-check-name"  # `name` attribute is listed first in this resource
-     ...
-   }
-   resource "google_compute_network" "default" {
-     name               = "network-name"  # `name` attribute is listed first in this resource
-     ...
-   }
-   ```
- 
-   This is required for the `convert2erb` parser to recognize a resource and generate a variable name for the `terraform.yaml` config. Otherwise, for that resource no config `terrarform.yaml` variable is created, and that resesource definition will be copied as-is to the `filename.tf.erb` template file.
+  If your Terraform file includes a reference to `random_pet` in the `name` argument, `tftools` operation fails with a parsing error.
 
 ### Generate the Ruby files for Magic Modules
 
