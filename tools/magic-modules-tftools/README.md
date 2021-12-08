@@ -4,7 +4,7 @@ The Magic Modules Terraform Automation Tools (`tftools`) are utilities written i
 
 As input, the script takes a `filename.tf` and outputs `filename.tf.erb` plus `terraform.yaml` content. The tool lets you do the reverse as well.
 
-> This repo in development mode. To contribute to this repo, see the [contributing guidelines](CONTRIBUTING.md).
+> This repo is in development mode. To contribute to this repo, see the [contributing guidelines](CONTRIBUTING.md).
 
 In [Magic Modules](https://github.com/GoogleCloudPlatform/magic-modules), every Terraform example (`filename.tf`) is represented by two files, as follows:
 
