@@ -133,7 +133,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
   }
   ```
   
-  Thus, in your `filename.tf` file, you can include the something like the following:
+  Therefore, in your `filename.tf` file, you can include something like the following, where the name of the bucket isn't globally unique:
   
   ```
   resource "google_compute_backend_bucket" "static" {
