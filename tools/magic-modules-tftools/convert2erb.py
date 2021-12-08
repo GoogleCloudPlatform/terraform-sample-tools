@@ -311,7 +311,7 @@ def convert_to_erb(filename):
 
     # user input - primary resource id
     pm_resource_id = input(
-        "\nFrom above a table please check and provide Primary Resource row ID: "
+        "\nFrom the above table, enter a Primary Resource row ID: "
     )
     pm_resource_id = int(pm_resource_id) - 1
     is_valid_user_input = False
