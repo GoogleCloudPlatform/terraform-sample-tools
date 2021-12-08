@@ -100,10 +100,10 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
       ```bash
       python3 -c 'import sys; print(sys.prefix + "/bin")'
       ```
-   b. Add the following to your `~/.bash_profile` file (create it, if it does not exist). Replace <PATH> with the output from the previous step.
+   b. Add the following to your `~/.bash_profile` file (create it, if it does not exist). Replace [PATH] with the output from the previous step.
 
       ```bash
-      export PATH="<PATH>":$PATH.  
+      export PATH="[PATH]":$PATH.  
       ```
    c. Restart your terminal or iterm.
   
