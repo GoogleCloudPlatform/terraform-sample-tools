@@ -75,7 +75,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 1. Move to the `setup.py` script location path and install.
 
    ```bash
-   cd terraform-sample-tools/tools/tools/magic-modules-tftools/
+   cd terraform-sample-tools/tools/magic-modules-tftools/
    sudo python3 setup.py install
    ```
 
