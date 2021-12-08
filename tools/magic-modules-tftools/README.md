@@ -91,7 +91,10 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    which tftools
    ```
 
-1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue. To fix:
+1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue.
+
+   To fix this issue, perform these steps:
+
    a. Run the following command and copy the output to your clipboard.
    
       ```bash
@@ -106,14 +109,13 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
   
   Alternatively, for Macs, you can use the following procedure to update your path:
   
-   a. Open up Terminal.
-   b. Run the following command and copy the output to your clipboard.
+   a. Run the following command and copy the output to your clipboard.
  
       ```
       python3 -c 'import sys; print(sys.prefix + "/bin")'
       ```
      
-   c. At the bottom of `/etc/paths`, paste the output from the previous step.
+   b. At the bottom of `/etc/paths`, paste the output from the previous step.
 
 
 ## How to use `tftools`
