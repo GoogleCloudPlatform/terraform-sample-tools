@@ -310,9 +310,7 @@ def convert_to_erb(filename):
     show_tf_resources_table()
 
     # user input - primary resource id
-    pm_resource_id = input(
-        "\nFrom the above table, enter a Primary Resource row ID: "
-    )
+    pm_resource_id = input("\nFrom the above table, enter a Primary Resource row ID: ")
     pm_resource_id = int(pm_resource_id) - 1
     is_valid_user_input = False
     if 0 <= pm_resource_id < len(resource_types):
