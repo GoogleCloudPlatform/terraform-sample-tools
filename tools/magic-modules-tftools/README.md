@@ -105,17 +105,24 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
       ```bash
       export PATH="[PATH]":$PATH.  
       ```
+      
+      For example:
+      
+      export PATH="/Library/Frameworks/Python.framework/Versions/3.7/bin/":$PATH
+      
    c. Restart your terminal or iterm.
   
   Alternatively, for Macs, you can use the following procedure to update your path:
   
    a. Run the following command and copy the output to your clipboard.
  
-      ```
       python3 -c 'import sys; print(sys.prefix + "/bin")'
-      ```
      
-   b. At the bottom of `/etc/paths`, paste the output from the previous step.
+   b. Open `/etc/paths`:
+   
+      sudo nano /etc/paths
+      
+   c. Paste the output from the previous step.
 
 
 ## How to use `tftools`
@@ -129,12 +136,12 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 3. In your Terraform file, within each resource, make sure that the `name` argument is the first argument. For example:
 
    ```
-   resource "google_compute_health_check" "default" {
-     name               = "health-check-name"  # `name` argument is listed first in this resource
+   resource "x" "default" {
+     name               = "name"  # `name` argument is listed first in this resource
      ...
    }
-   resource "google_compute_network" "default" {
-     name               = "network-name"  # `name` argument is listed first in this resource
+   resource "y" "default" {
+     name               = "name"  # `name` argument is listed first in this resource
      ...
    }
    ```
