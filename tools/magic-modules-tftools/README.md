@@ -108,7 +108,9 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
       
       For example:
       
+      ```bash
       export PATH="/Library/Frameworks/Python.framework/Versions/3.7/bin/":$PATH
+      ```
       
    c. Restart your terminal or iterm.
   
