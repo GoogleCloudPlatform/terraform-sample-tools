@@ -32,7 +32,7 @@ with io.open("README.md") as readme:
         license="Apache License Version 2.0",
         author="Sampath Kumar",
         author_email="sampathm@google.com",
-        url="https://github.com/msampathkumar/MagicModules-TerraformTools",
+        url="https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools",
         classifiers=[
             # 'Development Status :: 5 - Production/Stable',
             "Environment :: Console",
