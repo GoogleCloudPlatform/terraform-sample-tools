@@ -37,7 +37,7 @@ def main():
     else:
         print("Received no valid user inputs! Please check usage details @")
         cprint(
-            "\n\thttps://github.com/msampathkumar/MagicModules-TerraformTools/tree/command_line_tool#usage\n",
+            "\n\thttps://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools\n",
             "cyan",
         )
     cprint(
