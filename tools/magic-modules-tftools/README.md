@@ -148,7 +148,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    }
    ```
  
-   This is required for the `convert2erb` parser to recognize a resource and generate a variable name for the `terraform.yaml` config. Otherwise, for that resource no config `terrarform.yaml` variable is created, and that resesource definition will be copied as-is to the `.tf.erb` template file.
+   This is required for the `convert2erb` parser to recognize a resource and generate a variable name for the `terraform.yaml` config. Otherwise, for that resource no config `terrarform.yaml` variable is created, and that resource definition will be copied as-is to the `.tf.erb` template file.
    
 4. In your Terraform file, after you are finished with local testing, remove any resources for generating unique resource names, such as `random_pet`. These resources are unnecessary because Magic Modules automatically generates unique names when testing resources that have the `vars` tag, as follows:
 
@@ -222,7 +222,7 @@ In your workflow, you might make some changes in your Ruby file and then need to
    ```bash
    $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
 
-   # (Alternavitely) This also works
+   # (Alternatively) This also works
    $ convert2tf   magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
    ```
   
