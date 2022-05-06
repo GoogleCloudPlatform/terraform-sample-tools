@@ -83,6 +83,7 @@ resource_types, resource_tfnames, resource_names = [], [], []
 template_header = """
       - !ruby/object:Provider::Terraform::Examples
         name: "{}"
+        primary_resource_type: "{}"
         primary_resource_id: "{}"
         vars:
 """.strip(
@@ -280,6 +281,7 @@ def _generate_teraform_yaml(filename, resource_id):
     data.append(
         template_header.format(
             os.path.basename(filename).split(".")[0],
+            resource_types[resource_id].strip(),
             resource_tfnames[resource_id].replace("-", "_"),
         )
     )
