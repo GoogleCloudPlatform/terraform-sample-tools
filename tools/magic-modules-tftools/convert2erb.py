@@ -95,6 +95,7 @@ template_vars_prefix = """
     "\n"
 )
 template_footer = """
+        skip_docs: true  # Change to false if you want to add sample to https://registry.terraform.io/providers/hashicorp/google/latest/docs
         min_version: beta
         # ignore_read_extra:
         #   - "port_range"
