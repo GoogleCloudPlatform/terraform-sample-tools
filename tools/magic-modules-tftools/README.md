@@ -66,7 +66,21 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 ## How to install
 
-1. Clone this repo. Or, optionally, you can download the `.zip` file.
+1. Open Cloud Shell at https://shell.cloud.google.com/.
+
+1. Create a virtual environment.
+
+   ```bash
+   python3 -m venv py3
+   ```
+
+1. Activate the virtual environment.
+
+   ```bash
+   source  py3/bin/activate
+   ``` 
+
+1. Clone the repo.
 
    ```bash
    git clone https://github.com/GoogleCloudPlatform/terraform-sample-tools.git
@@ -77,12 +91,6 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    ```bash
    cd terraform-sample-tools/tools/magic-modules-tftools/
    sudo python3 setup.py install
-   ```
-
-1. Verify that `tftools` is installed.
-
-   ```bash
-   pip3 show tftools
    ```
 
 1. Verify that `tftools` is in your user path.
@@ -112,20 +120,8 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
       export PATH="/Library/Frameworks/Python.framework/Versions/3.7/bin/":$PATH
       ```
       
-   c. Restart your terminal or iterm.
-  
-  Alternatively, for Macs, you can use the following procedure to update your path:
-  
-   a. Run the following command and copy the output to your clipboard.
+   c. Restart your Cloud Shell.
  
-      python3 -c 'import sys; print(sys.prefix + "/bin")'
-     
-   b. Open `/etc/paths`:
-   
-      sudo nano /etc/paths
-      
-   c. Paste the output from the previous step.
-
 
 ## How to use `tftools`
 
@@ -176,6 +172,12 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 Now that you have prepared your `descriptive-and-unique-filename.tf` file, you can generate the Ruby template file (`filename.tf.erb`) and the `terraform.yaml` content:
 
+1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
+
+   ```bash
+   source  py3/bin/activate
+   ``` 
+   
 1. From the command line, provide `descriptive-and-unique-filename.tf` as input to `tftools`:
 
    ```bash
@@ -211,6 +213,12 @@ For detailed instructions on creating a pull request for Magic Modules, see the 
 
 In your workflow, you might make some changes in your Ruby file and then need to retest in Terraform to make sure your example still works. Because you can't directly test a `tf.erb` file, you must generate a new `.tf` file.
 
+1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
+
+   ```bash
+   source  py3/bin/activate
+   ``` 
+
 1. Remove `_check` from `terraform.yaml_check`.
 
    ```
@@ -220,18 +228,25 @@ In your workflow, you might make some changes in your Ruby file and then need to
 1. From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
 
    ```bash
-   $ tftools      magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
+   $ tftools terraform_example.tf.erb  terraform.yaml
 
    # (Alternatively) This also works
-   $ convert2tf   magic_module_terraform_example.tf.erb   magic_module_terraform.yaml
+   $ convert2tf terraform_example.tf.erb terraform.yaml
    ```
   
-  The script outputs an updated `.tf` file. In this example, `magic_module_terraform_example.tf`.
+  The script outputs an updated `.tf` file. In this example, `terraform_example.tf`.
 
 ### How to uninstall
 
-Use the standard `pip3` tool for uninstallation.
 
-```bash
-$ pip3 uninstall tftools
-```
+
+1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
+
+   ```bash
+   source  py3/bin/activate
+   ``` 
+1. Use the standard `pip3` tool for uninstallation.
+ 
+   ```bash
+   $ pip3 uninstall tftools
+   ```
