@@ -238,8 +238,6 @@ In your workflow, you might make some changes in your Ruby file and then need to
 
 ### How to uninstall
 
-
-
 1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
 
    ```bash
@@ -250,3 +248,28 @@ In your workflow, you might make some changes in your Ruby file and then need to
    ```bash
    $ pip3 uninstall tftools
    ```
+   
+## Troubleshooting
+
+If you see the following error:
+
+```bash
+Traceback (most recent call last):
+  File "/usr/bin/tftools", line 33, in <module>
+    sys.exit(load_entry_point('tftools==1.0', 'console_scripts', 'tftools')())
+  File "/usr/bin/tftools", line 22, in importlib_load_entry_point
+    for entry_point in distribution(dist_name).entry_points
+  File "/usr/lib/python3.9/importlib/metadata.py", line 524, in distribution
+    return Distribution.from_name(distribution_name)
+  File "/usr/lib/python3.9/importlib/metadata.py", line 187, in from_name
+    raise PackageNotFoundError(name)
+importlib.metadata.PackageNotFoundError: tftools
+```
+
+Make sure that your virtual environment is activated:
+
+```bash
+source  py3/bin/activate
+```
+
+
