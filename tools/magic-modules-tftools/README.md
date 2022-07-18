@@ -70,32 +70,32 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 1. Create a virtual environment.
 
-   ```bash
+   ```
    python3 -m venv py3
    ```
 
 1. Activate the virtual environment.
 
-   ```bash
+   ```
    source  py3/bin/activate
    ``` 
 
 1. Clone the repo.
 
-   ```bash
+   ```
    git clone https://github.com/GoogleCloudPlatform/terraform-sample-tools.git
    ```
 
 1. Move to the `setup.py` script location path and install.
 
-   ```bash
+   ```
    cd terraform-sample-tools/tools/magic-modules-tftools/
    sudo python3 setup.py install
    ```
 
 1. Verify that `tftools` is in your user path.
 
-   ```bash
+   ```
    which tftools
    ```
 
@@ -105,22 +105,23 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
    a. Run the following command and copy the output to your clipboard.
    
-      ```bash
+      ```
       python3 -c 'import sys; print(sys.prefix + "/bin")'
       ```
-   b. Add the following to your `~/.bash_profile` file (create it, if it does not exist). Replace [PATH] with the output from the previous step.
+  
+   b. Run the following comman. Replace [PATH] with the output from the previous step.
 
-      ```bash
+      ```
       export PATH="[PATH]":$PATH.  
       ```
       
       For example:
       
-      ```bash
-      export PATH="/Library/Frameworks/Python.framework/Versions/3.7/bin/":$PATH
+      ```
+      export PATH="/home/YOUR_LDAP/py3/bin":$PATH
       ```
       
-   c. Restart your Cloud Shell.
+   c. Restart Cloud Shell.
  
 
 ## How to use `tftools`
@@ -174,13 +175,13 @@ Now that you have prepared your `descriptive-and-unique-filename.tf` file, you c
 
 1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
 
-   ```bash
-   source  py3/bin/activate
+   ```
+   source py3/bin/activate
    ``` 
    
 1. From the command line, provide `descriptive-and-unique-filename.tf` as input to `tftools`:
 
-   ```bash
+   ```
    $ tftools descriptive-and-unique-filename.tf
 
    # (Alternative) This also works:
@@ -215,8 +216,8 @@ In your workflow, you might make some changes in your Ruby file and then need to
 
 1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
 
-   ```bash
-   source  py3/bin/activate
+   ```
+   source py3/bin/activate
    ``` 
 
 1. Remove `_check` from `terraform.yaml_check`.
@@ -227,7 +228,7 @@ In your workflow, you might make some changes in your Ruby file and then need to
    
 1. From command line, provide `.tf.erb` and `terraform.yaml` files as input for `tftools`. `tftools` calls `convert2tf` script to generate a Terraform `.tf` file.
 
-   ```bash
+   ```
    $ tftools terraform_example.tf.erb  terraform.yaml
 
    # (Alternatively) This also works
@@ -240,12 +241,12 @@ In your workflow, you might make some changes in your Ruby file and then need to
 
 1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
 
-   ```bash
-   source  py3/bin/activate
+   ```
+   source py3/bin/activate
    ``` 
 1. Use the standard `pip3` tool for uninstallation.
  
-   ```bash
+   ```
    $ pip3 uninstall tftools
    ```
    
@@ -253,7 +254,7 @@ In your workflow, you might make some changes in your Ruby file and then need to
 
 If you see the following error:
 
-```bash
+```
 Traceback (most recent call last):
   File "/usr/bin/tftools", line 33, in <module>
     sys.exit(load_entry_point('tftools==1.0', 'console_scripts', 'tftools')())
@@ -268,8 +269,8 @@ importlib.metadata.PackageNotFoundError: tftools
 
 Make sure that your virtual environment is activated:
 
-```bash
-source  py3/bin/activate
+```
+source py3/bin/activate
 ```
 
 
