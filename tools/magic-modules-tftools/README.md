@@ -173,11 +173,8 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 Now that you have prepared your `descriptive-and-unique-filename.tf` file, you can generate the Ruby template file (`filename.tf.erb`) and the `terraform.yaml` content:
 
-1. In [Cloud Shell](https://shell.cloud.google.com/), activate the virtual environment.
-
-   ```
-   source py3/bin/activate
-   ``` 
+1. If you're in a new [Cloud Shell](https://shell.cloud.google.com/), repeat the steps in [How to install](#how-to-install) and then return to
+   this section.
    
 1. From the command line, provide `descriptive-and-unique-filename.tf` as input to `tftools`:
 
