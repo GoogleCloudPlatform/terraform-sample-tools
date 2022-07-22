@@ -99,7 +99,8 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    which tftools
    ```
 
-1. After installation `tftools` might not be available in the command line. This might be caused by a `PATH` issue.
+1. If you are intalling `tftools` locally (instead of in Cloud Shell), `tftools` might not be available in the command line.
+   This might be caused by a `PATH` issue.
 
    To fix this issue, perform these steps:
 
@@ -121,7 +122,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
       export PATH="/home/YOUR_LDAP/py3/bin":$PATH
       ```
       
-   c. Restart Cloud Shell.
+   c. Restart your terminal.
  
 
 ## How to use `tftools`
