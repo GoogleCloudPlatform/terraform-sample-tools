@@ -126,7 +126,11 @@ NOTE: If you are intalling `tftools` locally (instead of in Cloud Shell), `tftoo
 
 ### Prepare your `filename.tf` file for conversion
 
-1. Get or create a Terraform file (`filename.tf`).
+1. Navigate to the directory with your Terraform file (`<filename>.tf`).
+
+   ```
+   cd ../../../
+   ```
 
 2. Use a descriptive name for your Terraform file. The filename must be unique in the [Magic Modules template directory](https://github.com/GoogleCloudPlatform/magic-modules/tree/master/mmv1/templates/terraform/examples). So instead of `main.tf`, use the pattern `my-product-with-x-feature.tf`. For example: `int-https-lb-https-with-redirect.tf` for internal HTTPS load balancer with redirect.
 
