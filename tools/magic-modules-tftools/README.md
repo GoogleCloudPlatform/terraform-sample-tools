@@ -99,10 +99,7 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
    which tftools
    ```
 
-1. If you are intalling `tftools` locally (instead of in Cloud Shell), `tftools` might not be available in the command line.
-   This might be caused by a `PATH` issue.
-
-   To fix this issue, perform these steps:
+NOTE: If you are intalling `tftools` locally (instead of in Cloud Shell), `tftools` might not be available in the command line. This might be caused by a `PATH` issue. To fix this issue, perform these steps:
 
    a. Run the following command and copy the output to your clipboard.
    
