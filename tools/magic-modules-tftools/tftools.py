@@ -17,8 +17,7 @@ Simple wrapper tool for convert2tf and convert2rb!
 import sys
 from termcolor import cprint
 
-import convert2erb
-import convert2tf
+from bin import convert2tf, convert2erb
 
 
 def main():

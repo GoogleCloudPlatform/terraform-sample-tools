@@ -59,17 +59,14 @@ import os
 import sys
 import re
 import logging
-from time import time
-from termcolor import colored, cprint
+from termcolor import cprint
 
 
 # logging settings
+from bin.util import show_warning, timer_func
+
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)
-
-
-def show_warning(text):
-    print(colored(color="red", text=str(text + "\n")))
 
 
 tf_lines = []
@@ -106,31 +103,11 @@ template_footer = """
 )
 
 
-def timer_func(func):
-    # This function shows the execution time of
-    # the function object passed
-    def wrap_func(*args, **kwargs):
-        t1 = time()
-        line = "---------------------[starting - {}]---------------------"
-        logging.debug(line.format(func.__name__))
-        result = func(*args, **kwargs)
-        t2 = time()
-        logging.info(f"Function {func.__name__!r} executed in {(t2-t1):.4f}s")
-        line = "---------------------[ending - {}]---------------------"
-        return result
-
-    return wrap_func
-
-
 def get_resource_name(text):
     try:
         name = re.findall(resource_name_regex_pattern, text)[0]
     except Exception as err:
-        print(
-            colored(
-                "\n\tError: Failed to find name for the following line", color="red"
-            )
-        )
+        show_warning("\n\tError: Failed to find name for the following line")
         print("\t\t--->[" + text + "]<---")
         raise Exception("Parsing Error!")
     return name
@@ -140,11 +117,7 @@ def get_resource_rtype_and_tfname(text):
     try:
         rtype, tfname = re.findall(resource_regex_pattern, text)[0]
     except Exception as err:
-        print(
-            colored(
-                "\n\tError: Failed to find name for the following line", color="red"
-            )
-        )
+        show_warning("\n\tError: Failed to find name for the following line")
         print("\t\t--->[" + text + "]<---")
         raise Exception(err)
     return rtype, tfname
@@ -199,7 +172,7 @@ def tf_resource_parser(filename):
     # logging.debug("parsing is compelted !!")
 
     if not len(resource_types) == len(resource_tfnames) == len(resource_names):
-        cprint("\nNoticed unexpected pattern! Please check the parsing logic!\n", "red")
+        show_warning("\nNoticed unexpected pattern! Please check the parsing logic!")
         raise Exception("Error: Failed to Parse file for details!")
 
 
@@ -218,7 +191,7 @@ def show_tf_resources_table():
 
 def replace_text_in_double_quotes(erb_template, astring, bstring):
     # To replace terraform resource names
-    logging.debug(" - Repace [{}] with [{}]".format(astring, bstring))
+    logging.debug(" - Replace [{}] with [{}]".format(astring, bstring))
     erb_template_len = len(erb_template)
     erb_template = erb_template.replace('"{}"'.format(astring), '"{}"'.format(bstring))
     if len(erb_template) == erb_template_len:

@@ -42,15 +42,11 @@ import os
 import sys
 import re
 import logging
-from termcolor import colored
+from bin.util import show_warning
 
 # logging settings
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)
-
-
-def show_warning(text):
-    print(colored(color="red", text=str(text + "\n")))
 
 
 def find_tf_section(vars_file, section_name):
