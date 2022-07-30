@@ -47,15 +47,9 @@ with io.open("README.md") as readme:
             # 'Topic :: Software Development :: Libraries :: Python Modules',
             # 'Topic :: Software Development :: Quality Assurance',
         ],
-        keywords="terraform, magimodules",
+        keywords="Google Cloud, Cloud Docs, magicmodules, terraform, code, snippet, sample",
         install_requires=INSTALL_REQUIRES,
-        py_modules=["convert2tf", "convert2erb", "tftools"],
+        py_modules=["bin", "tftools"],
         zip_safe=False,
-        entry_points={
-            "console_scripts": [
-                "tftools = tftools:main",
-                "convert2erb = convert2erb:main",
-                "convert2tf = convert2tf:main",
-            ]
-        },
+        entry_points={"console_scripts": ["tftools = tftools:main"]},
     )

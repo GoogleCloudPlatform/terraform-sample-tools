@@ -59,11 +59,10 @@ import os
 import sys
 import re
 import logging
-from termcolor import cprint
 
 
 # logging settings
-from bin.util import show_warning, timer_func
+from bin.util import show_warning, show_title, timer_func
 
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)
@@ -177,7 +176,7 @@ def tf_resource_parser(filename):
 
 
 def show_tf_resources_table():
-    cprint("Terraform Resources Summary", "blue", attrs=["bold"])
+    show_title("Terraform Resources Summary")
     print("--" * 55)
     print(
         " ID\t" + to_table3c_row_format("ResourceType", "TFLocalName", "ResourceName")
@@ -243,11 +242,12 @@ def _generate_erb_file(filename, resource_id):
         erb_template, resource_id
     )
 
-    out_fname = os.path.basename(filename).split(".")[0] + ".tf.erb_check"
-    with open(out_fname, "w") as fp:
+    out_file = os.path.basename(filename).split(".")[0] + ".tf.erb_check"
+    out_file = os.path.join(os.path.dirname(filename), out_file)
+    with open(out_file, "w") as fp:
         fp.write(erb_template)
-        # print("Written to {0}".format(out_fname))
-    return out_fname
+        # print("Written to {0}".format(out_file))
+    return out_file
 
 
 def _generate_teraform_yaml(filename, resource_id):
@@ -262,16 +262,17 @@ def _generate_teraform_yaml(filename, resource_id):
     for each in resource_names:
         data.append(template_vars_prefix.format(cleanup_tfvar_name(each), each))
     data.append(template_footer)
-    out_fname = "terraform.yaml_check"
-    with open(out_fname, "w") as fp:
+    out_file = "terraform.yaml_check"
+    out_file = os.path.join(os.path.dirname(filename), out_file)
+    with open(out_file, "w") as fp:
         fp.write("\n".join(data))
-        # print("Written to {0}".format(out_fname))
-    return out_fname
+        # print("Written to {0}".format(out_file))
+    return out_file
 
 
 @timer_func
 def generate_erb_yaml_files(filename, pm_resource_id):
-    cprint("\n(Re)Created Files", "blue", attrs=["bold"])
+    show_title("\n(Re)Created Files")
     # create .tf.erb
     print(" - {}".format(_generate_erb_file(filename, pm_resource_id)))
     # create .yaml file
