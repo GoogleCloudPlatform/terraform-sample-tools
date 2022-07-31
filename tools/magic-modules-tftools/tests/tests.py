@@ -13,34 +13,52 @@
 # limitations under the License.
 import os
 import time
-
+import difflib
 
 import unittest
 import logging
 from shutil import copyfile
 
-
 sample_test_file = "external_http_lb_mig_backend_custom_header.tf"
 
 # logging settings
 logging.basicConfig()
+
+
 # logging.getLogger().setLevel(logging.DEBUG)
 
 
-def os_run(command):
-    print(command)
-    return os.system(command)
+class BaseTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.to_erb = Tf2Erb()
+        self.to_tf_files = Erb2Tf()
+        return super().setUp()
+
+    def test_convert2tf(self):
+        files = self.to_tf_files
+        files.check_input_files()
+        self._run_erb_to_tf_cli_command(files.input_erb_file, files.input_yaml_file)
+        files.check_output_file()
+        files.check_expectations()
+
+
+class BaseTestTf2Erb(unittest.TestCase):
+    pass
+
+
+class BaseTestErb2Tf(unittest.TestCase):
+    pass
 
 
 class TestTFtools(unittest.TestCase):
     def setUp(self) -> None:
         # check for input file
         self.assertEqual(
-            os.path.isfile("external_http_lb_mig_backend_custom_header.tf"),
+            os.path.isfile(sample_test_file),
             True,
             "Error: Testfile is missing!",
         )
-        self.sample_test_file = "external_http_lb_mig_backend_custom_header.tf"
+        self.sample_test_file = sample_test_file
         self.sample_backup_file = self.sample_test_file + "_backup"
         self.sample_test_output_erbfile = self.sample_test_file + ".erb"
         self.sample_test_output_yamlfile = "terraform.yaml"
@@ -50,12 +68,7 @@ class TestTFtools(unittest.TestCase):
 
     def test_convert2erb(self):
         # run tftools
-        run_command = "../tftools.py {}  < {}".format(
-            self.sample_test_file, self.sample_test_tf_configfile
-        )
-        self.assertEqual(
-            os_run(run_command), 0, "Error: Failed to generate .tf.erb & .yaml files"
-        )
+        self._run_convert2erb(self.sample_test_file, self.sample_test_tf_configfile)
         # check for output file
         self.assertEqual(
             os.path.isfile(self.sample_test_output_erbfile + "_check"),
@@ -71,7 +84,7 @@ class TestTFtools(unittest.TestCase):
     def test_convert2tf(self):
         for file in [self.sample_test_output_erbfile, self.sample_test_output_yamlfile]:
             os.rename(os.path.abspath(file) + "_check", os.path.abspath(file))
-        run_command = "../tftools.py {} {}".format(
+        run_command = "python3 ../tftools.py {} {}".format(
             self.sample_test_output_erbfile, self.sample_test_output_yamlfile
         )
         self.assertEqual(os_run(run_command), 0, "Error: Failed to generate .tf files")
