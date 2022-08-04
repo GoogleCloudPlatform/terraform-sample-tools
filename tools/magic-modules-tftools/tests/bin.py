@@ -10,12 +10,19 @@ print(f'Version {__file__}: {__version__}')
 
 class Base(unittest.TestCase):
 
+    def __init__(self, test_folder, methodName="check_all"):
+        print(f'[{test_folder}]> Setting Init Vars')
+        self.init_test_vars(test_folder)
+        super().__init__()
+        self.test_folder = None
+
     @abstractmethod
-    def init_test_vars(self, test_folder):
+    def init_test_vars(self, test_folder: str) -> None:
         pass
 
     @staticmethod
     def os_run(command):
+        command = command + '> /dev/null'
         print(command)
         return os.system(command)
 
@@ -58,9 +65,14 @@ class Base(unittest.TestCase):
         pass
 
     def check_all(self):
+        test_folder = self.test_folder
+        print(f'[{test_folder}]> Testing Input Files')
         self.test_input_files()
+        print(f'[{test_folder}]> Test run TFTools')
         self.test_run_tftools()
+        print(f'[{test_folder}]> Testing Output Files')
         self.test_output_file()
+        print(f'[{test_folder}]> Testing Expectations')
         self.test_expectations()
 
 
@@ -129,7 +141,7 @@ class Erb2Tf(Base):
     # expectations
     expect_tf_file = None
 
-    def init_test_vars(self, test_folder):
+    def init_test_vars(self, test_folder='test1'): # TODO remove default value
         self.test_folder = test_folder
         self.input_erb_file = glob.glob(f'samples/{test_folder}/erb2tf/*.tf.erb')[0]
         self.input_yaml_file = glob.glob(f'samples/{test_folder}/erb2tf/*.yaml')[0]
@@ -140,7 +152,7 @@ class Erb2Tf(Base):
         # ../../filename.tf.erb --> ../../filename.tf
         return os.path.join(
             os.path.dirname(self.input_erb_file),
-            os.path.basename(self.input_erb_file).strip(".erb"),
+            os.path.basename(self.input_erb_file).rstrip(".erb"),
         )
 
     def test_input_files(self):
@@ -167,10 +179,15 @@ class Erb2Tf(Base):
 
 
 def automated_suite(test_folder_name):
-    suite = unittest.TestSuite()
-    suite.addTest(Tf2Erb("test_convert2erb"))
-    return suite
+    print("--" * 25)
+    print(f'Running Automated Tests for {test_folder_name}')
+    print("--" * 25)
+    for test_object in [Tf2Erb(test_folder_name), Erb2Tf(test_folder_name)]:
+        # test_object.init_test_vars(test_folder_name)
+        test_object.check_all()
+
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner()  # failfast=True)
-    runner.run(suite())
+    automated_suite('test1')
+#     runner = unittest.TextTestRunner()  # failfast=True)
+#     runner.run(automated_suite("test1"))

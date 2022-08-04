@@ -66,6 +66,8 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 ## How to install
 
+For Mac user, check [here](https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/MAC_SETUP.md) for setting
+
 1. Open Cloud Shell at https://shell.cloud.google.com/.
 
 1. Create a virtual environment.
