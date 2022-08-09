@@ -3,20 +3,45 @@ import os
 import glob
 import difflib
 from abc import abstractmethod
-import logging
-
-LOGGER = logging.getLogger(__name__)
-
-__version__ = "0.1.0"
-print(f"Version {__file__}: {__version__}")
 
 
-class Base:
-    def __init__(self, test_folder, methodName="check_all"):
-        print(f"[{test_folder}]> Setting Init Vars")
-        self.init_test_vars(test_folder)
-        super().__init__()
-        self._test_folder = None
+class Config:
+    _test_folder = None
+    # Tf2Erb inputs
+    input_tf_file = None
+    input_cli_file = None
+    # Tf2Erb expectations
+    expect_erb_file = None
+    expect_yaml_file = None
+    # Erb2Tf inputs
+    input_erb_file = None
+    input_yaml_file = None
+    # Erb2Tf expectations
+    expect_tf_file = None
+
+    @property
+    def output_erb_file(self):
+        return self.input_tf_file + ".erb_check"
+
+    @property
+    def output_yaml_file(self):
+        return os.path.join(os.path.dirname(self.input_tf_file), "terraform.yaml_check")
+
+    @property
+    def output_tf_file(self):
+        # ../../filename.tf.erb --> ../../filename.tf
+        return os.path.join(
+            os.path.dirname(self.input_erb_file),
+            os.path.basename(self.input_erb_file).rstrip(".erb"),
+        )
+
+
+class Base(Config):
+
+    # def __init__(self, test_folder, methodName="check_all"):
+    #     print(f"[{test_folder}]> Setting Init Vars")
+    #     self.init_test_vars(test_folder)
+    #     super().__init__()
 
     @staticmethod
     def assert_equal(actual, expected, error_message):
@@ -40,7 +65,7 @@ class Base:
             return open(file_name).read().strip().splitlines()
 
         diff = difflib.ndiff(get_data(file1), get_data(file2))
-        changes = [l for l in diff if l.startswith("+ ") or l.startswith("- ")]
+        changes = [line for line in diff if line.startswith("+ ") or line.startswith("- ")]
         for each in changes:
             print(each)
         error_message = (
@@ -56,42 +81,34 @@ class Base:
         self.assert_equal(os.path.isfile(filename), True, error_message)
 
     @abstractmethod
-    def _test_input_files(self):
+    def check_input_files(self):
         pass
 
     @abstractmethod
-    def _test_output_file(self):
+    def check_output_files(self):
         pass
 
     @abstractmethod
-    def _test_expectations(self):
+    def check_expectations(self):
         pass
 
     @abstractmethod
-    def _test_run_tftools(self):
+    def run_tftools(self):
         pass
 
     def check_all(self):
         test_folder = self._test_folder
-        LOGGER.info("eggs info")
         print(f"[{test_folder}]> Testing Input Files")
-        self._test_input_files()
+        self.check_input_files()
         print(f"[{test_folder}]> Test run TFTools")
-        self._test_run_tftools()
+        self.run_tftools()
         print(f"[{test_folder}]> Testing Output Files")
-        self._test_output_file()
+        self.check_output_files()
         print(f"[{test_folder}]> Testing Expectations")
-        self._test_expectations()
+        self.check_expectations()
 
 
 class Tf2Erb(Base):
-    # inputs
-    input_tf_file = None
-    input_cli_file = None
-    # expectations
-    expect_erb_file = None
-    expect_yaml_file = None
-
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -102,25 +119,17 @@ class Tf2Erb(Base):
         self.expect_erb_file = glob.glob(f"{test_folder}/*.erb")[0]
         self.expect_yaml_file = glob.glob(f"{test_folder}/*.yaml")[0]
 
-    @property
-    def output_erb_file(self):
-        return self.input_tf_file + ".erb_check"
-
-    @property
-    def output_yaml_file(self):
-        return os.path.join(os.path.dirname(self.input_tf_file), "terraform.yaml_check")
-
-    def _test_input_files(self):
+    def check_input_files(self):
         self._file_check(self.input_tf_file)
         self._file_check(self.input_cli_file)
         self._file_check(self.expect_yaml_file)
         self._file_check(self.expect_erb_file)
 
-    def _test_output_file(self):
+    def check_output_files(self):
         self._file_check(self.output_yaml_file, False)
         self._file_check(self.output_erb_file, False)
 
-    def _test_expectations(self):
+    def check_expectations(self):
         file_diff, error_message = self.get_file_difference(
             self.expect_erb_file, self.output_erb_file
         )
@@ -133,7 +142,7 @@ class Tf2Erb(Base):
             len(file_diff), 0, "FileError: Output File not matching expectation"
         )
 
-    def _test_run_tftools(self):
+    def run_tftools(self):
         """to check for execution failure in conversion of TF -> Erb & Yaml"""
         # run tftools
         run_command = "python3 ../tftools.py {} < {}".format(
@@ -148,12 +157,6 @@ class Tf2Erb(Base):
 
 
 class Erb2Tf(Base):
-    # inputs
-    input_erb_file = None
-    input_yaml_file = None
-    # expectations
-    expect_tf_file = None
-
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -164,29 +167,21 @@ class Erb2Tf(Base):
         self.input_yaml_file = glob.glob(f"{test_folder}/*.yaml")[0]
         self.expect_tf_file = glob.glob(f"{test_folder}/*.tf")[0]
 
-    @property
-    def output_tf_file(self):
-        # ../../filename.tf.erb --> ../../filename.tf
-        return os.path.join(
-            os.path.dirname(self.input_erb_file),
-            os.path.basename(self.input_erb_file).rstrip(".erb"),
-        )
-
-    def _test_input_files(self):
+    def check_input_files(self):
         self._file_check(self.input_erb_file)
         self._file_check(self.input_yaml_file)
         self._file_check(self.expect_tf_file)
 
-    def _test_output_file(self):
+    def check_output_files(self):
         self._file_check(self.output_tf_file, False)
 
-    def _test_expectations(self):
+    def check_expectations(self):
         file_diff, error_message = self.get_file_difference(
             self.expect_tf_file, self.output_tf_file
         )
         self.assert_equal(len(file_diff), 0, error_message)
 
-    def _test_run_tftools(self):
+    def run_tftools(self):
         """to check for execution failure in conversion of Erb & Yaml -> TF"""
         # run tftools
         run_command = "python3 ../tftools.py {} {}".format(
@@ -195,3 +190,10 @@ class Erb2Tf(Base):
         self.assert_equal(
             self.os_run(run_command), 0, "Error: Failed to generate .tf files"
         )
+
+
+def get_test_dirs():
+    for each in glob.glob("samples/*/*"):
+        if each.endswith("erb2tf") or each.endswith("tf2erb"):
+            if "test_template" not in each:
+                yield each

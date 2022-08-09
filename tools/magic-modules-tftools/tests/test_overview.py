@@ -1,15 +1,7 @@
 import os
-import glob
 import pytest
 
-from bin import Erb2Tf, Tf2Erb
-
-
-def get_test_dirs():
-    for each in glob.glob("samples/*/*"):
-        if each.endswith("erb2tf") or each.endswith("tf2erb"):
-            if "test_template" not in each:
-                yield each
+from bin import Erb2Tf, Tf2Erb, get_test_dirs
 
 
 # https://docs.pytest.org/en/latest/how-to/fixtures.html#factories-as-fixtures
@@ -19,12 +11,15 @@ def test_folder_name(request):
 
 
 def test_automated_suite(test_folder_name):
+    test_object = None
     if test_folder_name.endswith("tf2erb"):
-        test_object = Tf2Erb(test_folder_name)
-        test_object.check_all()
-    if test_folder_name.endswith("erb2tf"):
-        test_object = Erb2Tf(test_folder_name)
-        test_object.check_all()
+        test_object = Tf2Erb()
+    elif test_folder_name.endswith("erb2tf"):
+        test_object = Erb2Tf()
+    else:
+        raise Exception(f"InputError: {test_folder_name} is not as expected!")
+    test_object.init_test_vars(test_folder_name)
+    test_object.check_all()
 
 
 if __name__ == "__main__":
