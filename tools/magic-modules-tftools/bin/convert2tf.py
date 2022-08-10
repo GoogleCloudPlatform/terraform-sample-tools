@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,18 +26,6 @@ __Note:__ Please use a proper file name for `.tf` files, as filename is used for
 3. Output .tf file is generated from the location where script is executed!
 4. Output .tf file will have same name as .erb file (for test.tf.erb, output file is test.tf)
 
-Example:
-```
-# from magic-modules directory
-bash$ mkdir test; cd test
-
-# download this script to here
-# run - `chmod +x convert2tf.py`
-# run - `pip3 install termcolor`. We use pkg this for erros highlighting in terminal!
-
-# example - generating tf file for http external load balencer
-bash$ ./convert2tf.py ../mmv1/templates/terraform/examples/external_http_lb_mig_backend_custom_header.tf.erb ../mmv1/products/compute/terraform.yaml
-```
 """
 import os
 import sys

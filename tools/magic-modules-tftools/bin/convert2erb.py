@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -168,7 +169,7 @@ def tf_resource_parser(filename):
             resource_types.append(rtype)
             resource_tfnames.append(tfname)
             resource_names.append(rname)
-    # logging.debug("parsing is compelted !!")
+    # logging.debug("parsing is completed !!")
 
     if not len(resource_types) == len(resource_tfnames) == len(resource_names):
         show_warning("\nNoticed unexpected pattern! Please check the parsing logic!")
