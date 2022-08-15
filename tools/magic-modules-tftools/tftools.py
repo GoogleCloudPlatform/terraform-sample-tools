@@ -32,7 +32,7 @@ def main():
         convert2tf.parse_user_args(sys.argv)
     elif ".tf" in " ".join(sys.argv):
         show_heading("Running - convert2erb")
-        convert2erb.parse_user_args(sys.argv)
+        convert2erb.validate_user_inputs(sys.argv)
     else:
         print("Received no valid user inputs! Please check usage details @")
         show_heading(f"{github_link}\n")

@@ -13,315 +13,147 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Magic Modules Terraform Scripts testing(helper) tool!
-
-Job of this script to convert .tf into .erb & .yaml file.
-
-## How to use this script?
-
-1. Download this script.
-2. Make this script executeable: `chmod +x convert2erb.py`.
-3. Run `pip3 install termcolor`.
-4. Run the script: `./convert2erb.py <filename>.tf`
-
-   When prompted, select a resource to be the primary one.
-
-   Note: In the Hashicorp Google provider reference documentation, the
-   primary resource is the one that gets updated to include your
-   new example.
-
-## Output files
-
-The following output files are generated from the location where script is
-executed:
-
-*  An .erb file that you can add to Magic Modules in mmv1/templates/terraform/examples.
-   The output .erb file will have same name as the .tf file
-   (for test.tf, output file is test.tf.erb).
-*  A terraform.yaml_check file contains content that you can add to Magic Modules in
-   mmv1/products/<your_product>/terraform.yaml.
-
-
-Example:
-```
-# Download this script to required location
-# run - `chmod +x convert2erb.py`
-# run - `pip3 install termcolor`. We use pkg this for error highlighting in terminal!
-
-# example - generating .erb * .yaml
-bash$ ./convert2erb.py my_terraform_snippet.tf
-
-Limitation:
-    - It is expected all the `tf resources` have a `name` associated with them
-    - It is expected all the tf resource attribute `name` is the first attribute defined
-```
+Tool `convert2rb` to convert terraform file into .erb template and yaml file!
 """
 import os
 import sys
-import re
-import logging
+from AntParser.app import main as ant_parser
+from template import generate_terraform_yaml
+from util import show_warning, show_title, timer_func
+
+DEBUG = False
 
 
-# logging settings
-from bin.util import show_warning, show_title, timer_func
-
-logging.basicConfig()
-# logging.getLogger().setLevel(logging.DEBUG)
-
-
-tf_lines = []
-resource_lines = []
-resource_name_lines = []
-resource_regex_pattern = 'resource\s*"([\w, -]+)"\s*"([\w, -]+)"'
-resource_name_regex_pattern = 'name\s*=\s*"([\w, -]+)"'
-resource_types, resource_tfnames, resource_names = [], [], []
-
-# yaml templates
-template_header = """
-      - !ruby/object:Provider::Terraform::Examples
-        name: "{}"
-        primary_resource_type: "{}"
-        primary_resource_id: "{}"
-        vars:
-""".strip(
-    "\n"
-)
-template_vars_prefix = """
-          {}: "{}"
-""".strip(
-    "\n"
-)
-template_footer = """
-        skip_docs: true  # Change to false if you want to add sample to https://registry.terraform.io/providers/hashicorp/google/latest/docs
-        min_version: beta
-        # ignore_read_extra:
-        #   - "port_range"
-        #   - "target"
-        #   - "ip_address"
-""".lstrip(
-    "\n"
-)
-
-
-def get_resource_name(text):
-    try:
-        name = re.findall(resource_name_regex_pattern, text)[0]
-    except Exception as err:
-        show_warning("\n\tError: Failed to find name for the following line")
-        print("\t\t--->[" + text + "]<---")
-        raise Exception("Parsing Error!")
-    return name
-
-
-def get_resource_rtype_and_tfname(text):
-    try:
-        rtype, tfname = re.findall(resource_regex_pattern, text)[0]
-    except Exception as err:
-        show_warning("\n\tError: Failed to find name for the following line")
-        print("\t\t--->[" + text + "]<---")
-        raise Exception(err)
-    return rtype, tfname
-
-
-def to_table3c_row_format(word1, word2, word3):
-    # Return a row with 3 columns structure
-    line = " " * 15 + word2.center(80, " ")
-    line = word1 + line[len(word1) : 100 - len(word3)] + word3
-    return line
-
-
-def cleanup_tfvar_name(name):
+def cleanup_attribute_name(name):
     return name.replace("-", "_")
 
 
-def get_template_tfvar_name(name):
-    return "<%= ctx[:vars]['{}'] %>".format(cleanup_tfvar_name(name))
+def dprint(text):
+    if DEBUG:
+        print(text.strip())
 
 
-def get_template_primary_resource_line(resource_type):
-    return 'resource "' + resource_type + '" "<%= ctx[:primary_resource_id] %>" {'
+def show_resources_table(resource_records):
+    print("")
+    show_title("Terraform Resources Summary")
+
+    # internal function
+    def to_3c_table_row_format(word1, word2, word3):
+        # Return a row with 3 columns structure
+        line = " " * 15 + word2.center(80, " ")
+        line = word1 + line[len(word1): 100 - len(word3)] + word3
+        return line
+
+    print("--" * 55)
+    print(
+        " ID\t" + to_3c_table_row_format("ResourceType", "TFLocalName", "ResourceName")
+    )
+
+    for i, data_record in enumerate(resource_records):
+        rtype, tfname, rname = (
+            data_record.tf_type,
+            data_record.tf_tfname,
+            data_record.tf_name,
+        )
+        print(" %2d.\t" % (i + 1) + to_3c_table_row_format(rtype, tfname, rname))
+    print("--" * 55)
 
 
 @timer_func
-def tf_resource_parser(filename):
-    tf_lines = list(open(filename))
-    flag = False
-    flag2 = False
-    # logging.debug('File Parsing,...')
-    for line in tf_lines:
-        line = line.strip()
-        # identify resource tf line
-        if line.startswith("resource "):
-            resource_lines.append(line)
-            flag = True
-            # print('\t' + line)
-        # identify resource name line
-        if flag and line.startswith("name "):
-            resource_name_lines.append(line)
-            flag = False
-            flag2 = True
-            # print('\t' + line)
-        # update records
-        if flag2:
-            flag2 = False
-            rtype, tfname = get_resource_rtype_and_tfname(resource_lines[-1])
-            rname = get_resource_name(resource_name_lines[-1])
-            resource_types.append(rtype)
-            resource_tfnames.append(tfname)
-            resource_names.append(rname)
-    # logging.debug("parsing is completed !!")
+def generate_erb_file(filename, resource_records, main_resource_id):
+    text_lines = open(filename).readlines()
+    line_numbers = [record.tf_line_no - 1 for record in resource_records]
 
-    if not len(resource_types) == len(resource_tfnames) == len(resource_names):
-        show_warning("\nNoticed unexpected pattern! Please check the parsing logic!")
-        raise Exception("Error: Failed to Parse file for details!")
+    def get_template_tf_var_name(name):
+        return "<%= ctx[:vars]['{}'] %>".format(cleanup_attribute_name(name))
 
+    def get_template_primary_resource_line(resource_type):
+        return 'resource "' + resource_type + '" "<%= ctx[:primary_resource_id] %>" {'
 
-def show_tf_resources_table():
-    show_title("Terraform Resources Summary")
-    print("--" * 55)
-    print(
-        " ID\t" + to_table3c_row_format("ResourceType", "TFLocalName", "ResourceName")
-    )
-    for i, (rtype, tfname, rname) in enumerate(
-        zip(resource_types, resource_tfnames, resource_names)
-    ):
-        print(" %2d.\t" % (i + 1) + to_table3c_row_format(rtype, tfname, rname))
-    print("--" * 55)
+    # update `resource` line
+    ct = 0
+    for i, ln in enumerate(line_numbers):
+        record = resource_records[i]
 
+        if i == main_resource_id:
+            dprint(f"Current[{ln}]:\t" + text_lines[ln])
+            text_lines[ln] = get_template_primary_resource_line(record.tf_type) + "\n"
+            dprint(f"Updated[{ln}]:\t" + text_lines[ln])
+            ct += 1
 
-def replace_text_in_double_quotes(erb_template, astring, bstring):
-    # To replace terraform resource names
-    logging.debug(" - Replace [{}] with [{}]".format(astring, bstring))
-    erb_template_len = len(erb_template)
-    erb_template = erb_template.replace('"{}"'.format(astring), '"{}"'.format(bstring))
-    if len(erb_template) == erb_template_len:
-        logging.warning(
-            "\nPlease check [{}] as text replacement did not work!!\n".format(astring)
-        )
-    return erb_template
+    # update `name` line
+    for i, ln in enumerate(line_numbers):
+        record = resource_records[i]
 
-
-def _generate_erb_file_primary_resource_replacement(erb_template, resource_id):
-    # primary line
-    rtype, tfname, rname = (
-        resource_types[resource_id],
-        resource_tfnames[resource_id],
-        resource_names[resource_id],
-    )
-    tf_primary_resource_line = None
-    for line in resource_lines:
-        if rtype in line and tfname in line:
-            tf_primary_resource_line = line
-            break
-    if not tf_primary_resource_line:
-        raise Exception("Error: Failed to identify primary Line for replacement!")
-    else:
-        tf_primary_resource_new_line = get_template_primary_resource_line(
-            resource_types[resource_id]
-        )
-
-    logging.debug(
-        "Replace primary resource lines \n\t--->[{}]<----\n\t--->[{}]<----\n".format(
-            tf_primary_resource_line, tf_primary_resource_new_line
-        )
-    )
-    erb_template = erb_template.replace(
-        tf_primary_resource_line, tf_primary_resource_new_line
-    )
-    return erb_template
-
-
-def _generate_erb_file(filename, resource_id):
-    erb_template = open(filename).read()
-    # convert vars with vars template
-    for k in resource_names:
-        erb_template = replace_text_in_double_quotes(
-            erb_template, k, get_template_tfvar_name(k)
-        )
-    # primary resource name replacement
-    erb_template = _generate_erb_file_primary_resource_replacement(
-        erb_template, resource_id
-    )
+        # To update resource's name variable
+        if record.tf_line_no != record.tf_name_line:
+            ln = record.tf_name_line - 1
+            dprint(f"Current[{ln}]:\t" + text_lines[ln])
+            line = text_lines[ln].split("=")
+            line[-1] = ' "{}"'.format(get_template_tf_var_name(record.tf_name))
+            text_lines[ln] = "=".join(line) + "\n"
+            dprint(f"Updated[{ln}]:\t" + text_lines[ln])
 
     out_file = os.path.basename(filename).split(".")[0] + ".tf.erb_check"
     out_file = os.path.join(os.path.dirname(filename), out_file)
-    with open(out_file, "w") as fp:
-        fp.write(erb_template)
-        # print("Written to {0}".format(out_file))
-    return out_file
 
-
-def _generate_teraform_yaml(filename, resource_id):
-    data = []
-    data.append(
-        template_header.format(
-            os.path.basename(filename).split(".")[0],
-            resource_types[resource_id].strip(),
-            resource_tfnames[resource_id].replace("-", "_"),
-        )
-    )
-    for each in resource_names:
-        data.append(template_vars_prefix.format(cleanup_tfvar_name(each), each))
-    data.append(template_footer)
-    out_file = "terraform.yaml_check"
-    out_file = os.path.join(os.path.dirname(filename), out_file)
     with open(out_file, "w") as fp:
-        fp.write("\n".join(data))
-        # print("Written to {0}".format(out_file))
+        fp.write("".join(text_lines))
+        print(" -> Output Written to {0}\n".format(out_file))
     return out_file
 
 
 @timer_func
-def generate_erb_yaml_files(filename, pm_resource_id):
-    show_title("\n(Re)Created Files")
-    # create .tf.erb
-    print(" - {}".format(_generate_erb_file(filename, pm_resource_id)))
-    # create .yaml file
-    print(" - {}".format(_generate_teraform_yaml(filename, pm_resource_id)))
-
-
-def convert_to_erb(filename):
-    # parse file to collect resources details
-    tf_resource_parser(filename)
-
+def get_primary_resource_id(resource_records, pm_id=None):
     # show terraform resources summary
-    show_tf_resources_table()
+    show_resources_table(resource_records)
 
     # user input - primary resource id
-    pm_resource_id = input("\nFrom the above table, enter a Primary Resource row ID: ")
+    pm_resource_id = pm_id or input(
+        "\nFrom the above table, enter a Primary Resource row ID: "
+    )
     pm_resource_id = int(pm_resource_id) - 1
     is_valid_user_input = False
-    if 0 <= pm_resource_id < len(resource_types):
+    if pm_id or (0 <= pm_resource_id < len(resource_records)):
         is_valid_user_input = True
+        data_record = resource_records[pm_resource_id]
         rtype, tfname, rname = (
-            resource_types[pm_resource_id],
-            resource_tfnames[pm_resource_id],
-            resource_names[pm_resource_id],
+            data_record.tf_type,
+            data_record.tf_tfname,
+            data_record.tf_name,
         )
         print("\nResourceType\t: " + rtype)
         print("TFLocalName\t: " + tfname)
         print("ResourceName\t: " + rname)
 
     if is_valid_user_input and input("\nEnter `yes` to proceed: ") == "yes":
-        generate_erb_yaml_files(filename, pm_resource_id)
+        return pm_resource_id
+    else:
+        print("INFO: Skip Run, due to invalid or missing UserInput")
+        return None
 
 
-def parse_user_args(args):
+@timer_func
+def validate_user_inputs(args):
     filename = ""
-    for each in sys.argv:
+    for each in args:
         if each.endswith(".tf"):
             filename = each
     if not (os.path.isfile(filename) and filename.endswith(".tf")):
         text = "\nFileInputError: Expected a valid `.tf` file path as input"
         show_warning(text)
         raise Exception("Missing command line input")
-    convert_to_erb(filename)
+    return filename
 
 
 def main():
     print("Args:", sys.argv)
-    parse_user_args(sys.argv)
+    filename = validate_user_inputs(sys.argv)
+    resource_records = ant_parser(filename)
+    pm_resource_id = get_primary_resource_id(resource_records)
+    generate_terraform_yaml(filename, resource_records, pm_resource_id)
+    generate_erb_file(filename, resource_records, pm_resource_id)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
