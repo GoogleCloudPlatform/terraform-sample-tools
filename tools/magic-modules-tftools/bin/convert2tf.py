@@ -101,11 +101,11 @@ def convert_to_tf(tf_file_name, vars_file):
         )
         show_warning("\n".join(missing_var_defs))
     # write TF
-    out_file = "{0}.tf".format(section_name)
+    out_file = "{0}.tf_check".format(section_name)
     out_file = os.path.join(os.path.dirname(tf_file_name), out_file)
     with open(out_file, "w") as fp:
-        fp.write(tf_file)
         print("\nOutputFile: {0}".format(out_file))
+        fp.write(tf_file)
 
 
 def parse_user_args(args):

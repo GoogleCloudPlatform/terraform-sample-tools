@@ -100,7 +100,7 @@ class CustomListener(terraformListener):
 
     # Enter a parse tree produced by terraformParser#argument.
     def enterArgument(self, ctx: terraformParser.ArgumentContext):
-        if self._is_in_resource:
+        if self._is_in_resource and not self._resource_name_value:
             text = ctx.getText()
             if text.startswith("name="):
                 self._resource_name_value = text[5:].strip("'").strip('"')
@@ -120,21 +120,20 @@ def main(filename, cli_run=False):
     listener = CustomListener()
     walker.walk(listener, tree)
     if cli_run:
-        text = "ANTLR Parser".center(50).replace('  ', '==')
-        print('')
+        text = "ANTLR Parser".center(50).replace("  ", "==")
+        print("")
         print(text)
         for each in listener.getcustomResourceData():
             print("--> " + str(each))
-        print('=' * 50)
-        print('')
+        print("=" * 50)
+        print("")
     return listener.getcustomResourceData()
 
 
 if __name__ == "__main__":
     cli_arguments = sys.argv
     tf_filename = sys.argv[-1]
-    if tf_filename.endswith('.tf') and os.path.isfile(tf_filename):
+    if tf_filename.endswith(".tf") and os.path.isfile(tf_filename):
         main(tf_filename, cli_run=True)
     else:
-        print('Error: Expecting a valid .tf file')
-
+        print("Error: Expecting a valid .tf file")

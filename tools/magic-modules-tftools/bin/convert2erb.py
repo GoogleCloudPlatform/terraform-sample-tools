@@ -41,7 +41,7 @@ def show_resources_table(resource_records):
     def to_3c_table_row_format(word1, word2, word3):
         # Return a row with 3 columns structure
         line = " " * 15 + word2.center(80, " ")
-        line = word1 + line[len(word1): 100 - len(word3)] + word3
+        line = word1 + line[len(word1) : 100 - len(word3)] + word3
         return line
 
     print("--" * 55)
@@ -146,14 +146,20 @@ def validate_user_inputs(args):
     return filename
 
 
-def main():
-    print("Args:", sys.argv)
-    filename = validate_user_inputs(sys.argv)
+def main(user_args):
+    filename = validate_user_inputs(user_args)
+    print("\n Running ANTLR4 Parser")
     resource_records = ant_parser(filename)
     pm_resource_id = get_primary_resource_id(resource_records)
-    generate_terraform_yaml(filename, resource_records, pm_resource_id)
-    generate_erb_file(filename, resource_records, pm_resource_id)
+    out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)
+    if __name__ == "__main__":
+        print("\n -> Output Written to {0}".format(out_file))
+    out_file = generate_erb_file(filename, resource_records, pm_resource_id)
+    if __name__ == "__main__":
+        print("\n -> Output Written to {0}".format(out_file))
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    args = sys.argv
+    main(args)
+    print("Args:", args)

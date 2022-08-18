@@ -1,30 +1,28 @@
 import os
 
 HEADER = """
-  - !ruby/object:Provider::Terraform::Examples
-    name: "{}"
-    primary_resource_type: "{}"
-    primary_resource_id: "{}"
-    vars:
+      - !ruby/object:Provider::Terraform::Examples
+        name: "{}"
+        primary_resource_type: "{}"
+        primary_resource_id: "{}"
+        vars:
 """.strip(
     "\n"
 )
 
 VARS_PREFIX = """
-      {}: "{}"
+          {}: "{}"
 """.strip(
     "\n"
 )
 
 FOOTER = """
-    # Change `skip` to false if you want to add sample
-    #     to https://registry.terraform.io/providers/hashicorp/google/latest/docs
-    skip_docs: true
-    min_version: beta
-    # ignore_read_extra:
-    #   - "port_range"
-    #   - "target"
-    #   - "ip_address"
+        skip_docs: true  # Change to false if you want to add sample to https://registry.terraform.io/providers/hashicorp/google/latest/docs
+        min_version: beta
+        # ignore_read_extra:
+        #   - "port_range"
+        #   - "target"
+        #   - "ip_address"
 """.lstrip(
     "\n"
 )
