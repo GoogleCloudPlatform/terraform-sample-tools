@@ -21,21 +21,21 @@ class TestTFTools:
         self._setup(test_folder)
         self.test_object.check_input_files()
 
-    def test_output_file(self, test_folder):
-        self._setup(test_folder)
-        self.test_object.check_input_files()
-
     def test_run_tftools(self, test_folder):
         self._setup(test_folder)
-        self.test_object.check_input_files()
+        self.test_object.run_tftools()
+
+    def test_output_file(self, test_folder):
+        self._setup(test_folder)
+        self.test_object.check_output_files()
 
     def test_output_expectations(self, test_folder):
         self._setup(test_folder)
-        self.test_object.check_input_files()
+        self.test_object.check_expectations()
 
 
 if __name__ == "__main__":
     import os
     print(f"{__file__}")
-    # pytest.main() #args=["-sv", os.path.abspath(__file__)])
+    # pytest.main() #user_args=["-sv", os.path.abspath(__file__)])
     pytest.main(args=["-v", os.path.abspath(__file__)])

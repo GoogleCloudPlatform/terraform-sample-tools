@@ -19,6 +19,11 @@ class Config:
     # Erb2Tf expectations
     expect_tf_file = None
 
+    # Output Files
+    output_yaml_file = None
+    output_erb_file = None
+    output_tf_file = None
+
     @property
     def output_erb_file(self):
         return self.input_tf_file + ".erb_check"
@@ -37,11 +42,6 @@ class Config:
 
 
 class Base(Config):
-
-    # def __init__(self, test_folder, methodName="check_all"):
-    #     print(f"[{test_folder}]> Setting Init Vars")
-    #     self.init_test_vars(test_folder)
-    #     super().__init__()
 
     @staticmethod
     def assert_equal(actual, expected, error_message):
@@ -96,6 +96,10 @@ class Base(Config):
     def run_tftools(self):
         pass
 
+    def clean_up(self, file):
+        if os.path.isfile(file):
+            os.remove(file)
+
     def check_all(self):
         test_folder = self._test_folder
         print(f"[{test_folder}]> Testing Input Files")
@@ -109,6 +113,11 @@ class Base(Config):
 
 
 class Tf2Erb(Base):
+    """
+    Tester for Tf2Erb
+
+    Convert (.tf file & user_inputs ---> .tf.erb & .yaml)
+    """
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -134,6 +143,7 @@ class Tf2Erb(Base):
             self.expect_erb_file, self.output_erb_file
         )
         self.assert_equal(len(file_diff), 0, error_message)
+        self.clean_up(self.output_erb_file)
 
         file_diff, error_message = self.get_file_difference(
             self.expect_yaml_file, self.output_yaml_file
@@ -141,6 +151,7 @@ class Tf2Erb(Base):
         self.assert_equal(
             len(file_diff), 0, "FileError: Output File not matching expectation"
         )
+        self.clean_up(self.output_yaml_file)
 
     def run_tftools(self):
         """to check for execution failure in conversion of TF -> Erb & Yaml"""
@@ -157,6 +168,11 @@ class Tf2Erb(Base):
 
 
 class Erb2Tf(Base):
+    """
+    Tester for Erb2TF
+
+    Convert (.tf.erb & .yaml ---> .tf file)
+    """
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -180,6 +196,7 @@ class Erb2Tf(Base):
             self.expect_tf_file, self.output_tf_file
         )
         self.assert_equal(len(file_diff), 0, error_message)
+        self.clean_up(self.output_tf_file)
 
     def run_tftools(self):
         """to check for execution failure in conversion of Erb & Yaml -> TF"""
