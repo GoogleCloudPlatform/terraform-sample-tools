@@ -1,14 +1,8 @@
 **/.ipynb_checkpoints
 *.ipynb
 
-**/.DS_Store
-**/.idea
-
+.DS_Store
+.idea/*
 
 # Test cases
-## tf2erb
-tests/samples/*/tf2erb/*.tf
-!tests/samples/*/tf2erb/*.tf
-!tests/samples/*/tf2erb/*.md
-
-## tf2erb
+*_check
