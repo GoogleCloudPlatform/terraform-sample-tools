@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 from bin import Erb2Tf, Tf2Erb, get_test_dirs
 import pytest
 
@@ -38,4 +39,4 @@ if __name__ == "__main__":
     import os
     print(f"{__file__}")
     # pytest.main() #user_args=["-sv", os.path.abspath(__file__)])
-    pytest.main(args=["-v", os.path.abspath(__file__)])
+    pytest.main(args=["-xv", os.path.abspath(__file__)])

@@ -37,7 +37,7 @@ class Config:
         # ../../filename.tf.erb --> ../../filename.tf
         return os.path.join(
             os.path.dirname(self.input_erb_file),
-            os.path.basename(self.input_erb_file).rstrip(".erb"),
+            os.path.basename(self.input_erb_file).rstrip(".erb") + "_check"
         )
 
 
@@ -97,7 +97,7 @@ class Base(Config):
         pass
 
     def clean_up(self, file):
-        if os.path.isfile(file):
+        if file and os.path.isfile(file) and file.endswith('_check'):
             os.remove(file)
 
     def check_all(self):
@@ -212,5 +212,5 @@ class Erb2Tf(Base):
 def get_test_dirs():
     for each in glob.glob("samples/*/*"):
         if each.endswith("erb2tf") or each.endswith("tf2erb"):
-            if "test_template" not in each:
+            if "_template" not in each:
                 yield each

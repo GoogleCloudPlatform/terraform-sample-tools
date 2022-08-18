@@ -1,0 +1,30 @@
+# Below resource has 2 `name` attribute
+# Tftools should not replace `version.name` but only `name`
+resource "google_compute_instance_group_manager" "<%= ctx[:primary_resource_id] %>" {
+  name     = "<%= ctx[:vars]['l7_xlb_mig1'] %>"
+  provider = google-beta
+  zone     = "us-central1-c"
+  named_port {
+    name = "http"
+    port = 8080
+  }
+  version {
+    instance_template = google_compute_instance_template.default.id
+    name              = "primary"
+  }
+  base_instance_name = "vm"
+  target_size        = 2
+}
+
+# allow access from health check ranges
+resource "google_compute_firewall" "default" {
+  name          = "<%= ctx[:vars]['l7_xlb_fw_allow_hc'] %>"
+  provider      = google-beta
+  direction     = "INGRESS"
+  network       = google_compute_network.default.id
+  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
+  allow {
+    protocol = "tcp"
+  }
+  target_tags = ["allow-health-check"]
+}
