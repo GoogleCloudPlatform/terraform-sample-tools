@@ -17,9 +17,10 @@ Tool `convert2rb` to convert terraform file into .erb template and yaml file!
 """
 import os
 import sys
+
 from AntParser.app import main as ant_parser
 from template import generate_terraform_yaml
-from util import show_warning, show_title, timer_func
+from util import show_title, show_warning, timer_func
 
 DEBUG = False
 

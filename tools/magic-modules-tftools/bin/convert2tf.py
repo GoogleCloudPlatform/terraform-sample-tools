@@ -27,10 +27,11 @@ __Note:__ Please use a proper file name for `.tf` files, as filename is used for
 4. Output .tf file will have same name as .erb file (for test.tf.erb, output file is test.tf)
 
 """
-import os
-import sys
-import re
 import logging
+import os
+import re
+import sys
+
 from bin.util import show_warning
 
 # logging settings

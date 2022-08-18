@@ -11,10 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
-import glob
-import difflib
 from abc import abstractmethod
+
+import difflib
+import glob
+import os
 
 
 class Config:
@@ -222,7 +223,11 @@ class Erb2Tf(Base):
 
 
 def get_test_dirs():
-    for each in glob.glob("samples/*/*"):
+    path = 'tests/samples'
+    if not os.path.isdir(path):
+        path = 'samples'
+    for each in glob.glob(path + "/*/*"):
+        each = os.path.relpath(each)
         if each.endswith("erb2tf") or each.endswith("tf2erb"):
             if "_template" not in each:
                 yield each
