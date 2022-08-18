@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,6 @@
 
 """Setup for TF tools."""
 
-import ast
 import io
 
 from setuptools import setup
@@ -26,7 +26,7 @@ INSTALL_REQUIRES = ["termcolor"]
 with io.open("README.md") as readme:
     setup(
         name="tftools",
-        version="1.0",
+        version="2.0.1b",
         description="Terraform Tools for Magic Modules Developers",
         long_description=readme.read(),
         license="Apache License Version 2.0",
@@ -47,7 +47,7 @@ with io.open("README.md") as readme:
             # 'Topic :: Software Development :: Libraries :: Python Modules',
             # 'Topic :: Software Development :: Quality Assurance',
         ],
-        keywords="Google Cloud, Cloud Docs, magicmodules, terraform, code, snippet, sample",
+        keywords="Google Cloud Docs, GCP, MagicModules, Terraform, Code, Snippet, Samples",
         install_requires=INSTALL_REQUIRES,
         py_modules=["bin", "tftools"],
         zip_safe=False,
