@@ -19,9 +19,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 from dataclasses import dataclass
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 
-from lang.terraformLexer import terraformLexer
-from lang.terraformParser import terraformParser
-from lang.terraformListener import terraformListener
+from AntParser.lang.terraformLexer import terraformLexer
+from AntParser.lang.terraformParser import terraformParser
+from AntParser.lang.terraformListener import terraformListener
 
 # from lang.terraformVisitor import terraformVisitor
 

@@ -17,10 +17,10 @@
 
 import io
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
-INSTALL_REQUIRES = ["termcolor"]
+INSTALL_REQUIRES = open('requirements.txt').readlines()
 
 
 with io.open("README.md") as readme:
@@ -30,7 +30,7 @@ with io.open("README.md") as readme:
         description="Terraform Tools for Magic Modules Developers",
         long_description=readme.read(),
         license="Apache License Version 2.0",
-        author="Sampath Kumar",
+        author="Sampath Kumar Maddula",
         author_email="sampathm@google.com",
         url="https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools",
         classifiers=[
@@ -49,7 +49,8 @@ with io.open("README.md") as readme:
         ],
         keywords="Google Cloud Docs, GCP, MagicModules, Terraform, Code, Snippet, Samples",
         install_requires=INSTALL_REQUIRES,
-        py_modules=["bin", "tftools"],
+        py_modules=["tftools"],
+        packages=['bin', 'AntParser', 'AntParser.lang'],
         zip_safe=False,
         entry_points={"console_scripts": ["tftools = tftools:main"]},
     )
