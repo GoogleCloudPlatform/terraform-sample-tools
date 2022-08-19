@@ -34,13 +34,17 @@ def dprint(text):
         print(text.strip())
 
 
-def show_resources_table(resource_records):
+def show_resources_table(resource_records, heading=None):
     print("")
-    show_title("Terraform Resources Summary")
+    if heading:
+        show_title(heading)
+    else:
+        show_title("Terraform Resources Summary")
 
     # internal function
     def to_3c_table_row_format(word1, word2, word3):
         # Return a row with 3 columns structure
+        word3 = word3 or ''
         line = " " * 15 + word2.center(80, " ")
         line = word1 + line[len(word1) : 100 - len(word3)] + word3
         return line
@@ -87,7 +91,7 @@ def generate_erb_file(filename, resource_records, main_resource_id):
         record = resource_records[i]
 
         # To update resource's name variable
-        if record.tf_line_no != record.tf_name_line:
+        if record.tf_name_line and (record.tf_line_no != record.tf_name_line):
             ln = record.tf_name_line - 1
             dprint(f"Current[{ln}]:\t" + text_lines[ln])
             line = text_lines[ln].split("=")
@@ -104,8 +108,21 @@ def generate_erb_file(filename, resource_records, main_resource_id):
     return out_file
 
 
+def filter_out_nameless_resources(resource_records, display_filtered=True):
+    filtered_ids = []
+    for i, rr in enumerate(resource_records):
+        if not rr.tf_name:
+            filtered_ids.append(i)
+    show_resources_table(
+        [rr for i, rr in enumerate(resource_records) if i in filtered_ids],
+        heading="Filtering Resources without Name Attributes"
+    )
+    return [rr for i, rr in enumerate(resource_records) if i not in filtered_ids]
+
+
 @timer_func
 def get_primary_resource_id(resource_records, pm_id=None):
+    resource_records = filter_out_nameless_resources(resource_records, display_filtered=True)
     # show terraform resources summary
     show_resources_table(resource_records)
 
@@ -113,7 +130,11 @@ def get_primary_resource_id(resource_records, pm_id=None):
     pm_resource_id = pm_id or input(
         "\nFrom the above table, enter a Primary Resource row ID: "
     )
-    pm_resource_id = int(pm_resource_id) - 1
+    try:
+        pm_resource_id = int(pm_resource_id) - 1
+    except ValueError:
+        show_warning("\nSkip executions! Due to invalid or missing UserInput")
+        return
     is_valid_user_input = False
     if pm_id or (0 <= pm_resource_id < len(resource_records)):
         is_valid_user_input = True
@@ -121,7 +142,7 @@ def get_primary_resource_id(resource_records, pm_id=None):
         rtype, tfname, rname = (
             data_record.tf_type,
             data_record.tf_tfname,
-            data_record.tf_name,
+            data_record.tf_name or ''
         )
         print("\nResourceType\t: " + rtype)
         print("TFLocalName\t: " + tfname)
@@ -129,9 +150,9 @@ def get_primary_resource_id(resource_records, pm_id=None):
 
     if is_valid_user_input and input("\nEnter `yes` to proceed: ") == "yes":
         return pm_resource_id
-    else:
-        print("INFO: Skip Run, due to invalid or missing UserInput")
-        return None
+
+    show_warning("\nSkip executions! Due to invalid or missing UserInput")
+    return
 
 
 @timer_func
@@ -152,12 +173,13 @@ def main(user_args):
     print("\n Running ANTLR4 Parser")
     resource_records = ant_parser(filename)
     pm_resource_id = get_primary_resource_id(resource_records)
-    out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)
-    if __name__ == "__main__":
-        print("\n -> Output Written to {0}".format(out_file))
-    out_file = generate_erb_file(filename, resource_records, pm_resource_id)
-    if __name__ == "__main__":
-        print("\n -> Output Written to {0}".format(out_file))
+    if pm_resource_id:
+        out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)
+        if __name__ == "__main__":
+            print("\n -> Output Written to {0}".format(out_file))
+        out_file = generate_erb_file(filename, resource_records, pm_resource_id)
+        if __name__ == "__main__":
+            print("\n -> Output Written to {0}".format(out_file))
 
 
 if __name__ == "__main__":

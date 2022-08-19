@@ -44,7 +44,10 @@ YAML_FILE = "terraform.yaml_check"
 
 
 def cleanup_tf_name(name):
-    return name.replace("-", "_")
+    if name:
+        return name.replace("-", "_")
+    else:
+        return name
 
 
 def generate_terraform_yaml(filename, resource_records, main_resource_id):
