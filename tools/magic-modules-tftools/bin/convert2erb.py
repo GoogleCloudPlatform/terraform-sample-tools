@@ -18,7 +18,10 @@ Tool `convert2rb` to convert terraform file into .erb template and yaml file!
 import os
 import sys
 
+from typing import List
+
 from AntParser.app import main as ant_parser, ResourceRecord
+
 from bin.template import generate_terraform_yaml
 from bin.util import show_title, show_warning, timer_func
 
@@ -34,7 +37,7 @@ def dprint(text):
         print(text.strip())
 
 
-def show_resources_table(resource_records: ResourceRecord, heading=None):
+def show_resources_table(resource_records: List[ResourceRecord], heading=None):
     print("")
     if heading:
         show_title(heading)
@@ -66,7 +69,7 @@ def show_resources_table(resource_records: ResourceRecord, heading=None):
 
 @timer_func
 def generate_erb_file(
-    filename: str, resource_records: ResourceRecord, main_resource_id: int
+    filename: str, resource_records: List[ResourceRecord], main_resource_id: int
 ):
     text_lines = open(filename).readlines()
     line_numbers = [record.tf_line_no - 1 for record in resource_records]
@@ -110,15 +113,16 @@ def generate_erb_file(
     return out_file
 
 
-def terraform_file_quality_checks(resource_records: ResourceRecord):
+def terraform_file_quality_checks(resource_records: List[ResourceRecord]):
     _known_rname = set()
     print()
     for data_record in resource_records:
-        rtype, tfname, rname = (
-            data_record.tf_type,
-            data_record.tf_tfname,
-            data_record.tf_name or "",
-        )
+        rname = data_record.tf_name or ""
+        # rtype, tfname, rname = (
+        #     data_record.tf_type,
+        #     data_record.tf_tfname,
+        #     data_record.tf_name or "",
+        # )
         if "_" in rname:
             show_warning(f"-> TFTools recommends using `-` instead of `_` for {rname}")
         if rname and rname in _known_rname:
@@ -129,7 +133,9 @@ def terraform_file_quality_checks(resource_records: ResourceRecord):
             _known_rname.add(rname)
 
 
-def filter_out_nameless_resources(resource_records, display_filtered=True):
+def filter_out_nameless_resources(
+    resource_records: List[ResourceRecord], display_filtered=True
+):
     filtered_ids = []
     for i, rr in enumerate(resource_records):
         if not rr.tf_name:

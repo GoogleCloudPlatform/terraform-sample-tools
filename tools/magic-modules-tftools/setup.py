@@ -17,10 +17,10 @@
 
 import io
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
-INSTALL_REQUIRES = open('requirements.txt').readlines()
+INSTALL_REQUIRES = open("requirements.txt").readlines()
 
 
 with io.open("README.md") as readme:
@@ -50,7 +50,7 @@ with io.open("README.md") as readme:
         keywords="Google Cloud Docs, GCP, MagicModules, Terraform, Code, Snippet, Samples",
         install_requires=INSTALL_REQUIRES,
         py_modules=["tftools"],
-        packages=['bin', 'AntParser', 'AntParser.lang'],
+        packages=["bin", "AntParser", "AntParser.lang"],
         zip_safe=False,
         entry_points={"console_scripts": ["tftools = tftools:main"]},
     )

@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+
+from typing import List
+
 from AntParser.app import ResourceRecord
 
 HEADER = """
@@ -51,7 +54,9 @@ def cleanup_tf_name(name):
         return name
 
 
-def generate_terraform_yaml(filename: str, resource_records: ResourceRecord, main_resource_id: int):
+def generate_terraform_yaml(
+    filename: str, resource_records: List[ResourceRecord], main_resource_id: int
+):
     data = []
     record = resource_records[main_resource_id]
     # HEADER, primary resource

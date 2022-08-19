@@ -50,12 +50,11 @@ class Config:
         # ../../filename.tf.erb --> ../../filename.tf
         return os.path.join(
             os.path.dirname(self.input_erb_file),
-            os.path.basename(self.input_erb_file).rstrip(".erb") + "_check"
+            os.path.basename(self.input_erb_file).rstrip(".erb") + "_check",
         )
 
 
 class Base(Config):
-
     @staticmethod
     def assert_equal(actual, expected, error_message):
         assert actual == expected, error_message
@@ -78,7 +77,9 @@ class Base(Config):
             return open(file_name).read().strip().splitlines()
 
         diff = difflib.ndiff(get_data(file1), get_data(file2))
-        changes = [line for line in diff if line.startswith("+ ") or line.startswith("- ")]
+        changes = [
+            line for line in diff if line.startswith("+ ") or line.startswith("- ")
+        ]
         for each in changes:
             print(each)
         error_message = (
@@ -110,7 +111,7 @@ class Base(Config):
         pass
 
     def clean_up(self, file):
-        if file and os.path.isfile(file) and file.endswith('_check'):
+        if file and os.path.isfile(file) and file.endswith("_check"):
             os.remove(file)
 
     def check_all(self):
@@ -131,6 +132,7 @@ class Tf2Erb(Base):
 
     Convert (.tf file & user_inputs ---> .tf.erb & .yaml)
     """
+
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -186,6 +188,7 @@ class Erb2Tf(Base):
 
     Convert (.tf.erb & .yaml ---> .tf file)
     """
+
     def init_test_vars(self, test_folder):
         self._test_folder = test_folder
         assert (
@@ -223,9 +226,9 @@ class Erb2Tf(Base):
 
 
 def get_test_dirs():
-    path = 'tests/samples'
+    path = "tests/samples"
     if not os.path.isdir(path):
-        path = 'samples'
+        path = "samples"
     for each in glob.glob(path + "/*/*"):
         each = os.path.relpath(each)
         if each.endswith("erb2tf") or each.endswith("tf2erb"):
