@@ -14,6 +14,7 @@
 # limitations under the License.
 import os.path
 import sys
+sys.path.insert(0, os.path.dirname(__file__))
 
 from dataclasses import dataclass
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker

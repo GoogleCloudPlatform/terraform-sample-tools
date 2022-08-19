@@ -19,8 +19,8 @@ import os
 import sys
 
 from AntParser.app import main as ant_parser
-from template import generate_terraform_yaml
-from util import show_title, show_warning, timer_func
+from bin.template import generate_terraform_yaml
+from bin.util import show_title, show_warning, timer_func
 
 DEBUG = False
 
