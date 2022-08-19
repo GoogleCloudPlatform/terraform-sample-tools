@@ -12,7 +12,7 @@ RUN apk update && apk add bash
 
 WORKDIR /app
 COPY . /app
-
+RUN run.sh
 
 # RUN apt install default-jre -y
 #docker build -t tftools:latest .

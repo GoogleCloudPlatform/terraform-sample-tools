@@ -1,5 +1,12 @@
-dist
-build
+.DS_Store
+.cache
+.git
+.gitignore
+.idea
 .nox
 .pytest_cache
+build
+dist
+py3
+sponge_log.xml
 tftools.egg-info
