@@ -14,6 +14,7 @@
 # limitations under the License.
 import os.path
 import sys
+
 sys.path.insert(0, os.path.dirname(__file__))
 
 from dataclasses import dataclass
@@ -28,6 +29,17 @@ from AntParser.lang.terraformListener import terraformListener
 
 @dataclass
 class ResourceRecord:
+    """
+    A Data Class to collect resource details
+
+    In Jinja Template standard, below is visually representation of a ResourceRecord would look
+    ```bash
+    resource {{ResourceRecord.tf_type}} {{ResourceRecord.tf_tfname}}    # This line is {{ResourceRecord.tf_line_no}}
+        name = {{ResourceRecord.tf_name}}                               # This line is {{ResourceRecord.tf_name_line}}
+    }
+    ```
+    """
+
     tf_type: str
     tf_tfname: str
     tf_name: str = ""
