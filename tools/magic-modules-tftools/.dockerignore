@@ -1,0 +1,5 @@
+dist
+build
+.nox
+.pytest_cache
+tftools.egg-info
