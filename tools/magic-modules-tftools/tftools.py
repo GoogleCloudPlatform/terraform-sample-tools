@@ -17,8 +17,8 @@ Simple wrapper tool for convert2tf and convert2rb!
 """
 import sys
 
-from bin import convert2tf, convert2erb
-from bin.util import show_title, show_heading
+from bin import convert2erb, convert2tf
+from bin.util import show_heading, show_title
 
 github_link = "https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools"
 

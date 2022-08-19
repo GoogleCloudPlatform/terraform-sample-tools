@@ -1,0 +1,5 @@
+termcolor==1.1.0
+antlr4-python3-runtime==4.10
+nox==2022.8.7
+pytest==7.1.2
+black==21.11b1
