@@ -113,10 +113,11 @@ def filter_out_nameless_resources(resource_records, display_filtered=True):
     for i, rr in enumerate(resource_records):
         if not rr.tf_name:
             filtered_ids.append(i)
-    show_resources_table(
-        [rr for i, rr in enumerate(resource_records) if i in filtered_ids],
-        heading="Filtering Resources without Name Attributes"
-    )
+    if filtered_ids:
+        show_resources_table(
+            [rr for i, rr in enumerate(resource_records) if i in filtered_ids],
+            heading="Filtering Resources without Name Attributes"
+        )
     return [rr for i, rr in enumerate(resource_records) if i not in filtered_ids]
 
 
