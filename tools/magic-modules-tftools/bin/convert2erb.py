@@ -18,7 +18,7 @@ Tool `convert2rb` to convert terraform file into .erb template and yaml file!
 import os
 import sys
 
-from AntParser.app import main as ant_parser
+from AntParser.app import main as ant_parser, ResourceRecord
 from bin.template import generate_terraform_yaml
 from bin.util import show_title, show_warning, timer_func
 
@@ -34,7 +34,7 @@ def dprint(text):
         print(text.strip())
 
 
-def show_resources_table(resource_records, heading=None):
+def show_resources_table(resource_records: ResourceRecord, heading=None):
     print("")
     if heading:
         show_title(heading)
@@ -65,7 +65,9 @@ def show_resources_table(resource_records, heading=None):
 
 
 @timer_func
-def generate_erb_file(filename, resource_records, main_resource_id):
+def generate_erb_file(
+    filename: str, resource_records: ResourceRecord, main_resource_id: int
+):
     text_lines = open(filename).readlines()
     line_numbers = [record.tf_line_no - 1 for record in resource_records]
 
@@ -108,6 +110,25 @@ def generate_erb_file(filename, resource_records, main_resource_id):
     return out_file
 
 
+def terraform_file_quality_checks(resource_records: ResourceRecord):
+    _known_rname = set()
+    print()
+    for data_record in resource_records:
+        rtype, tfname, rname = (
+            data_record.tf_type,
+            data_record.tf_tfname,
+            data_record.tf_name or "",
+        )
+        if "_" in rname:
+            show_warning(f"-> TFTools recommends using `-` instead of `_` for {rname}")
+        if rname and rname in _known_rname:
+            show_warning(
+                f"-> TFTools recommends using names for resources. Found using `{rname}` multiple times"
+            )
+        else:
+            _known_rname.add(rname)
+
+
 def filter_out_nameless_resources(resource_records, display_filtered=True):
     filtered_ids = []
     for i, rr in enumerate(resource_records):
@@ -123,9 +144,6 @@ def filter_out_nameless_resources(resource_records, display_filtered=True):
 
 @timer_func
 def get_primary_resource_id(resource_records, pm_id=None):
-    resource_records = filter_out_nameless_resources(
-        resource_records, display_filtered=True
-    )
     # show terraform resources summary
     show_resources_table(resource_records)
 
@@ -173,8 +191,13 @@ def validate_user_inputs(args):
 
 def main(user_args):
     filename = validate_user_inputs(user_args)
-    print("\n Running ANTLR4 Parser")
+    print("Running - convert2erb - ANTLR4 Parser")
     resource_records = ant_parser(filename)
+    print("Running - convert2erb - TF File checks")
+    terraform_file_quality_checks(resource_records)
+    resource_records = filter_out_nameless_resources(
+        resource_records, display_filtered=True
+    )
     pm_resource_id = get_primary_resource_id(resource_records)
     if pm_resource_id is not None:
         out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)
