@@ -82,15 +82,15 @@ class Base(Config):
         for each in changes:
             print(each)
         error_message = (
-            f"FileError: Output file{file1} not matching Expectation file{file2}"
+            f"FileError: Output file {file1} not matching Expectation file {file2}"
         )
         return changes, error_message
 
     def _file_check(self, filename, is_input_file=True):
         if is_input_file:
-            error_message = f"FileError: InputFile{filename} Not Found!"
+            error_message = f"FileError: InputFile {filename} Not Found!"
         else:
-            error_message = f"FileError: OutputFile{filename} Not Found!"
+            error_message = f"FileError: OutputFile {filename} Not Found!"
         self.assert_equal(os.path.isfile(filename), True, error_message)
 
     @abstractmethod

@@ -44,7 +44,7 @@ def show_resources_table(resource_records, heading=None):
     # internal function
     def to_3c_table_row_format(word1, word2, word3):
         # Return a row with 3 columns structure
-        word3 = word3 or ''
+        word3 = word3 or ""
         line = " " * 15 + word2.center(80, " ")
         line = word1 + line[len(word1) : 100 - len(word3)] + word3
         return line
@@ -116,14 +116,16 @@ def filter_out_nameless_resources(resource_records, display_filtered=True):
     if filtered_ids:
         show_resources_table(
             [rr for i, rr in enumerate(resource_records) if i in filtered_ids],
-            heading="Filtering Resources without Name Attributes"
+            heading="Filtering Resources without Name Attributes",
         )
     return [rr for i, rr in enumerate(resource_records) if i not in filtered_ids]
 
 
 @timer_func
 def get_primary_resource_id(resource_records, pm_id=None):
-    resource_records = filter_out_nameless_resources(resource_records, display_filtered=True)
+    resource_records = filter_out_nameless_resources(
+        resource_records, display_filtered=True
+    )
     # show terraform resources summary
     show_resources_table(resource_records)
 
@@ -143,7 +145,7 @@ def get_primary_resource_id(resource_records, pm_id=None):
         rtype, tfname, rname = (
             data_record.tf_type,
             data_record.tf_tfname,
-            data_record.tf_name or ''
+            data_record.tf_name or "",
         )
         print("\nResourceType\t: " + rtype)
         print("TFLocalName\t: " + tfname)
@@ -174,7 +176,7 @@ def main(user_args):
     print("\n Running ANTLR4 Parser")
     resource_records = ant_parser(filename)
     pm_resource_id = get_primary_resource_id(resource_records)
-    if pm_resource_id:
+    if pm_resource_id is not None:
         out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)
         if __name__ == "__main__":
             print("\n -> Output Written to {0}".format(out_file))
