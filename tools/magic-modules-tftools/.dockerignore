@@ -7,6 +7,7 @@
 .pytest_cache
 build
 dist
+example*.tf*
 py3
 sponge_log.xml
 tftools.egg-info
