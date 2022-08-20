@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,32 +26,17 @@ __Note:__ Please use a proper file name for `.tf` files, as filename is used for
 3. Output .tf file is generated from the location where script is executed!
 4. Output .tf file will have same name as .erb file (for test.tf.erb, output file is test.tf)
 
-Example:
-```
-# from magic-modules directory
-bash$ mkdir test; cd test
-
-# download this script to here
-# run - `chmod +x convert2tf.py`
-# run - `pip3 install termcolor`. We use pkg this for erros highlighting in terminal!
-
-# example - generating tf file for http external load balencer
-bash$ ./convert2tf.py ../mmv1/templates/terraform/examples/external_http_lb_mig_backend_custom_header.tf.erb ../mmv1/products/compute/terraform.yaml
-```
 """
-import os
-import sys
-import re
 import logging
-from termcolor import colored
+import os
+import re
+import sys
+
+from bin.util import show_warning
 
 # logging settings
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)
-
-
-def show_warning(text):
-    print(colored(color="red", text=str(text + "\n")))
 
 
 def find_tf_section(vars_file, section_name):
@@ -116,10 +102,11 @@ def convert_to_tf(tf_file_name, vars_file):
         )
         show_warning("\n".join(missing_var_defs))
     # write TF
-    out_file = "{0}.tf".format(section_name)
+    out_file = "{0}.tf_check".format(section_name)
+    out_file = os.path.join(os.path.dirname(tf_file_name), out_file)
     with open(out_file, "w") as fp:
-        fp.write(tf_file)
         print("\nOutputFile: {0}".format(out_file))
+        fp.write(tf_file)
 
 
 def parse_user_args(args):

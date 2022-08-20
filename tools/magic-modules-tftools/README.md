@@ -66,6 +66,8 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 ## How to install
 
+For Mac user, check [Setting up a Mac development environment with pyenv and pyenv-virtualenv](https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/MAC_SETUP.md)
+
 1. Open Cloud Shell at https://shell.cloud.google.com/.
 
 1. Create a virtual environment.
@@ -123,6 +125,57 @@ NOTE: If you are intalling `tftools` locally (instead of in Cloud Shell), `tftoo
  
 
 ## How to use `tftools`
+
+### Using Docker
+
+For users familiar with Docker, can you use following sample logs for command and expected output.
+
+For fetching a local docker image file
+```bash
+$ docker pull msampathkumar/tftools
+
+Using default tag: latest
+latest: Pulling from msampathkumar/tftools
+Digest: sha256:d2e7cb0b26991ef729a259de41879f53d8a6cfd028038878e3beba9f04f742f2
+Status: Image is up to date for msampathkumar/tftools:latest
+docker.io/msampathkumar/tftools:latest
+```
+
+Running tftools docker images and checking OS, Python & Tftools details
+```bash
+$ docker run -it msampathkumar/tftools
+
+/app # hostname
+8709d7ceb240
+
+/app # uname -a
+Linux 8709d7ceb240 5.10.104-linuxkit #1 SMP Thu Mar 17 17:08:06 UTC 2022 x86_64 Linux
+
+/app # which tftools
+/usr/bin/tftools
+
+/app # python -V
+Python 3.9.5
+
+/app # pip show tftools
+Name: tftools
+Version: 2.0.1b0
+Summary: Terraform Tools for Magic Modules Developers
+Home-page: https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools
+Author: Sampath Kumar Maddula
+Author-email: sampathm@google.com
+License: Apache License Version 2.0
+Location: /usr/lib/python3.9/site-packages/tftools-2.0.1b0-py3.9.egg
+Requires: antlr4-python3-runtime, termcolor
+Required-by: 
+
+/app # tftools
+Running:/usr/bin/tftools
+=================================== [tftools] ===================================
+Received no valid user inputs! Please check usage details @
+https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools
+=================================== [tftools] ===================================
+```
 
 ### Prepare your `filename.tf` file for conversion
 

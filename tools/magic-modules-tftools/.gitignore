@@ -1,0 +1,8 @@
+**/.ipynb_checkpoints
+*.ipynb
+
+.DS_Store
+.idea/*
+
+# Test cases
+*_check

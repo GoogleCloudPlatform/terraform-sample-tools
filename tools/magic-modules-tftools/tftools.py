@@ -16,36 +16,27 @@
 Simple wrapper tool for convert2tf and convert2rb!
 """
 import sys
-from termcolor import cprint
 
-import convert2erb
-import convert2tf
+from bin import convert2erb, convert2tf
+from bin.util import show_heading, show_title
+
+github_link = "https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools"
 
 
 def main():
-    print(" ".join(sys.argv))
-    cprint(
-        "\n================================ [tftools] ================================\n",
-        "blue",
-        attrs=["bold"],
-    )
+    show_heading("Running:" + " ".join(sys.argv))
+    title_line = "\n" + "=" * 35 + " [tftools] " + "=" * 35
+    show_title(title_line)
     if (".tf.erb" in " ".join(sys.argv)) and ".yaml" in " ".join(sys.argv):
-        cprint("\nRunning - convert2tf\n", "cyan")
+        show_heading("Running - convert2tf")
         convert2tf.parse_user_args(sys.argv)
     elif ".tf" in " ".join(sys.argv):
-        cprint("\nRunning - convert2erb\n", "cyan")
-        convert2erb.parse_user_args(sys.argv)
+        show_heading("Running - convert2erb")
+        convert2erb.main(sys.argv)
     else:
         print("Received no valid user inputs! Please check usage details @")
-        cprint(
-            "\n\thttps://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools\n",
-            "cyan",
-        )
-    cprint(
-        "\n================================ [tftools] ================================\n",
-        "blue",
-        attrs=["bold"],
-    )
+        show_heading(f"{github_link}\n")
+    show_title(title_line)
 
 
 if __name__ == "__main__":

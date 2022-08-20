@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +15,22 @@
 
 """Setup for TF tools."""
 
-import ast
 import io
 
 from setuptools import setup
 
 
-INSTALL_REQUIRES = ["termcolor"]
+INSTALL_REQUIRES = open("requirements.txt").readlines()
 
 
 with io.open("README.md") as readme:
     setup(
         name="tftools",
-        version="1.0",
+        version="2.0.1b",
         description="Terraform Tools for Magic Modules Developers",
         long_description=readme.read(),
         license="Apache License Version 2.0",
-        author="Sampath Kumar",
+        author="Sampath Kumar Maddula",
         author_email="sampathm@google.com",
         url="https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools",
         classifiers=[
@@ -47,15 +47,10 @@ with io.open("README.md") as readme:
             # 'Topic :: Software Development :: Libraries :: Python Modules',
             # 'Topic :: Software Development :: Quality Assurance',
         ],
-        keywords="terraform, magimodules",
+        keywords="Google Cloud Docs, GCP, MagicModules, Terraform, Code, Snippet, Samples",
         install_requires=INSTALL_REQUIRES,
-        py_modules=["convert2tf", "convert2erb", "tftools"],
+        py_modules=["tftools"],
+        packages=["bin", "AntParser", "AntParser.lang"],
         zip_safe=False,
-        entry_points={
-            "console_scripts": [
-                "tftools = tftools:main",
-                "convert2erb = convert2erb:main",
-                "convert2tf = convert2tf:main",
-            ]
-        },
+        entry_points={"console_scripts": ["tftools = tftools:main"]},
     )
