@@ -1,2 +1,1 @@
-This test uses a code samples published @ https://raw.githubusercontent.com/terraform-google-modules/terraform-docs-samples/master/external_http_lb_mig_backend_custom_header/main.tf
-
+This test uses a code samples published @ https://github.com/GoogleCloudPlatform/terraform-sample-tools/issues/8
