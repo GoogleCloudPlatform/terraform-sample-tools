@@ -1,5 +1,6 @@
 # Docker from https://github.com/antlr/antlr4/tree/master/docker
-FROM antlr/antlr4
+#FROM antlr/antlr4
+FROM msampathkumar/antlr_antlr4
 
 # Install Python 3.9.5
 ENV PYTHONUNBUFFERED=1
@@ -10,11 +11,19 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 # Developer Tools
 RUN apk update && apk add bash
 
-WORKDIR /app
-COPY . /app
-RUN run.sh
+WORKDIR /magic-modules-tftools
+COPY . /magic-modules-tftools
+RUN sh run.sh
 
-# RUN apt install default-jre -y
-#docker build -t tftools:latest .
-#docker run -it  tftools:latest
+WORKDIR /root
+
 ENTRYPOINT ["/bin/sh"]
+
+## Docker commands ##
+# docker build -t tftools:latest .
+# docker run -it  tftools:latest
+# docker tag tftools:latest msampathkumar/tftools
+# docker push msampathkumar/tftools
+
+# docker pull msampathkumar/tftools
+# docker run -it msampathkumar/tftools
