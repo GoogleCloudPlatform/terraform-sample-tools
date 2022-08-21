@@ -66,6 +66,13 @@ The installation includes the following command-line tools: `convert2tf`,  `conv
 
 ## How to install
 
+TFTools 2.0 Version relies on using [ANTLR4](/AntParser). Users are requested to install it prior to installation of TFTools or [using Docker](#using-docker)
+
+For ANTLR4 installation, please check 
+* [ANTLR Home Page](https://www.antlr.org/)
+* [ANTLR4 Github Repository](https://github.com/antlr/antlr4)
+* [How to install antlr4?](https://stackoverflow.com/questions/41021963/how-to-install-antlr4)
+
 For Mac user, check [Setting up a Mac development environment with pyenv and pyenv-virtualenv](https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/MAC_SETUP.md)
 
 1. Open Cloud Shell at https://shell.cloud.google.com/.
@@ -176,6 +183,8 @@ Received no valid user inputs! Please check usage details @
 https://github.com/GoogleCloudPlatform/terraform-sample-tools/tree/main/tools/magic-modules-tftools
 =================================== [tftools] ===================================
 ```
+
+> Note: By default, any file or folder created inside a docker instance is deleted with docker instance itself. 
 
 ### Prepare your `filename.tf` file for conversion
 
