@@ -139,7 +139,7 @@ For users familiar with Docker, can you use following sample logs for command an
 
 ![Docker Animation GIF](docs/cli_docker_example.gif)
 
-For the steps shown in this image, please check [here](/docs/tftools_docker.md)
+For the steps shown in this image, please check [here](docs/tftools_docker.md)
 
 For fetching a local docker image file
 ```bash
