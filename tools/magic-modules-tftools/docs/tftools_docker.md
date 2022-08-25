@@ -1,6 +1,8 @@
 ## Step by step for  using TFTools with docker
 
-> User are expected to have a installed docker and able to access `docker` from their command line.
+> This tutorial assumes that users have docker installed and able to access `docker` from their command line.
+
+![Docker Animation GIF](cli_docker_example.gif)
 
 (Optional) Creating a temporary directory
 
