@@ -150,6 +150,12 @@ def filter_out_nameless_resources(
 
 @timer_func
 def get_primary_resource_id(resource_records, pm_id=None):
+    if not resource_records:
+        show_warning(
+            "\nError: Found no resource with `name` attribute to be Primary Resource!"
+        )
+        return
+
     # show terraform resources summary
     show_resources_table(resource_records)
 
