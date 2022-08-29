@@ -116,12 +116,16 @@ class CustomListener(terraformListener):
         if self._is_in_resource and not self._resource_name_value:
             text = ctx.getText()
             if text.startswith("name="):
-                if '${' in text:
-                    print(f' >> Ignoring Line [{ctx.start.line}] - Identified a text substitution!')
-                    print(f' >>>> Found `{text}`')
-                elif '(' not in text:
-                    print(f' >> Ignoring Line [{ctx.start.line}] - Identified a function call!')
-                    print(f' >>>> Found `{text}`')
+                if "${" in text:
+                    print(
+                        f" >> Ignoring Line [{ctx.start.line}] - Identified a text substitution!"
+                    )
+                    print(f" >>>> Found `{text}`")
+                elif "(" not in text:
+                    print(
+                        f" >> Ignoring Line [{ctx.start.line}] - Identified a function call!"
+                    )
+                    print(f" >>>> Found `{text}`")
                 else:
                     self._resource_name_value = text[5:].strip("'").strip('"')
                     self._resource_name_line_number = ctx.start.line
