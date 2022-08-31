@@ -117,20 +117,29 @@ def terraform_file_quality_checks(resource_records: List[ResourceRecord]):
     _known_rname = set()
     print()
     for data_record in resource_records:
-        rname = data_record.tf_name or ""
         # rtype, tfname, rname = (
         #     data_record.tf_type,
         #     data_record.tf_tfname,
         #     data_record.tf_name or "",
         # )
+        rname = data_record.tf_name or ""
         if "_" in rname:
-            show_warning(f"-> TFTools recommends using `-` instead of `_` for {rname}")
+            show_warning(
+                f"-> TFTools recommends using `-` instead of `_` for `{rname}`"
+            )
         if rname and rname in _known_rname:
             show_warning(
-                f"-> TFTools recommends using names for resources. Found using `{rname}` multiple times"
+                f"-> TFTools recommends using names for resources."
+                f' Found using `name = "{rname}"` multiple times'
             )
         else:
             _known_rname.add(rname)
+
+        tfname = data_record.tf_tfname
+        if "-" in tfname:
+            show_warning(
+                f"-> TFTools recommends using `_` instead of `-` for `{tfname}`"
+            )
 
 
 def filter_out_nameless_resources(
