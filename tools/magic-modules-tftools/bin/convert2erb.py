@@ -117,20 +117,29 @@ def terraform_file_quality_checks(resource_records: List[ResourceRecord]):
     _known_rname = set()
     print()
     for data_record in resource_records:
-        rname = data_record.tf_name or ""
         # rtype, tfname, rname = (
         #     data_record.tf_type,
         #     data_record.tf_tfname,
         #     data_record.tf_name or "",
         # )
+        rname = data_record.tf_name or ""
         if "_" in rname:
-            show_warning(f"-> TFTools recommends using `-` instead of `_` for {rname}")
+            show_warning(
+                f"-> TFTools recommends using `-` instead of `_` for `{rname}`"
+            )
         if rname and rname in _known_rname:
             show_warning(
-                f"-> TFTools recommends using names for resources. Found using `{rname}` multiple times"
+                f"-> TFTools recommends using names for resources."
+                f' Found using `name = "{rname}"` multiple times'
             )
         else:
             _known_rname.add(rname)
+
+        tfname = data_record.tf_tfname
+        if "-" in tfname:
+            show_warning(
+                f"-> TFTools recommends using `_` instead of `-` for `{tfname}`"
+            )
 
 
 def filter_out_nameless_resources(
@@ -207,9 +216,11 @@ def main(user_args):
     resource_records = ant_parser(filename)
     print("Running - convert2erb - TF File checks")
     terraform_file_quality_checks(resource_records)
-    resource_records = filter_out_nameless_resources(
-        resource_records, display_filtered=True
-    )
+    resource_records = [rr for rr in resource_records if rr.tf_name] + [
+        rr for rr in resource_records if not rr.tf_name
+    ]
+    # Use `filter_out_nameless_resources` to filter out namesless resources
+    # resource_records = filter_out_nameless_resources(resource_records, display_filtered=True)
     pm_resource_id = get_primary_resource_id(resource_records)
     if pm_resource_id is not None:
         out_file = generate_terraform_yaml(filename, resource_records, pm_resource_id)

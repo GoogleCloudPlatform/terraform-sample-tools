@@ -69,7 +69,8 @@ def generate_terraform_yaml(
     # vars
     for resource_record in resource_records:
         var_name = resource_record.tf_name
-        data.append(VARS_PREFIX.format(cleanup_tf_name(var_name), var_name))
+        if var_name:
+            data.append(VARS_PREFIX.format(cleanup_tf_name(var_name), var_name))
     # FOOTER
     data.append(FOOTER)
     # print("\n".join(data))

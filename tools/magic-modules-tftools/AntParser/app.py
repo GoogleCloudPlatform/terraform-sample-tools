@@ -121,7 +121,7 @@ class CustomListener(terraformListener):
                         f" >> Ignoring Line [{ctx.start.line}] - Identified a text substitution!"
                     )
                     print(f" >>>> Found `{text}`")
-                elif "(" not in text:
+                elif "(" in text:
                     print(
                         f" >> Ignoring Line [{ctx.start.line}] - Identified a function call!"
                     )
